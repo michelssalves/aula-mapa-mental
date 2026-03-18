@@ -13,6 +13,70 @@ import '@xyflow/react/dist/style.css'
 import './App.css'
 import { lessonsCatalog } from './data/lessonsCatalog'
 
+const highlightTerms = [
+  'Deus',
+  'Senhor',
+  'Cristo',
+  'Jesus',
+  'mordomo',
+  'mordomia',
+  'dizimo',
+  'contribuicao',
+  'oferta',
+  'ofertas',
+  'Lei',
+  'Novo Testamento',
+  'igreja primitiva',
+  'coracao',
+  'generosidade',
+  'fidelidade',
+  'justica',
+  'misericordia',
+  'fe',
+  'levitas',
+  'levita',
+  'sacerdotes',
+  'templo',
+  'tabernaculo',
+  'resumo',
+]
+
+const highlightPattern = new RegExp(
+  `(${highlightTerms
+    .sort((a, b) => b.length - a.length)
+    .map((term) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    .join('|')})`,
+  'gi',
+)
+
+function renderHighlightedText(text) {
+  const scriptureMatch = text.match(/^(.+?\d+:\d+(?:-\d+)?)\s+[—-]\s+(.+)$/)
+
+  if (scriptureMatch) {
+    return (
+      <>
+        <strong>{scriptureMatch[1]}</strong>
+        {' — '}
+        {renderHighlightedText(scriptureMatch[2])}
+      </>
+    )
+  }
+
+  const parts = text.split(highlightPattern)
+
+  return parts.map((part, index) => {
+    if (!part) {
+      return null
+    }
+
+    const isHighlight = highlightTerms.some(
+      (term) => term.toLowerCase() === part.toLowerCase(),
+    )
+
+    return isHighlight ? <strong key={`${part}-${index}`}>{part}</strong> : part
+  })
+}
+
 function LessonNode({ data }) {
   return (
     <article
@@ -26,12 +90,14 @@ function LessonNode({ data }) {
         ) : null}
       </div>
       <h3>{data.title}</h3>
-      {data.summary ? <p className="lesson-node__summary">{data.summary}</p> : null}
+      {data.summary ? (
+        <p className="lesson-node__summary">{renderHighlightedText(data.summary)}</p>
+      ) : null}
 
       {data.previewPoints?.length ? (
         <ul className="lesson-node__list">
           {data.previewPoints.map((point) => (
-            <li key={point}>{point}</li>
+            <li key={point}>{renderHighlightedText(point)}</li>
           ))}
         </ul>
       ) : null}
@@ -52,31 +118,25 @@ const toneEdgeColors = {
 }
 
 function MindMapCanvas({ nodes, edges, activeNodeId, onNodeSelect }) {
-  const { fitView, setCenter } = useReactFlow()
+  const { setCenter } = useReactFlow()
 
   useEffect(() => {
     const activeNode = nodes.find((node) => node.id === activeNodeId)
+    const viewportWidth = window.innerWidth
+    const responsiveZoom =
+      viewportWidth >= 1800 ? 0.98 : viewportWidth >= 1400 ? 0.93 : viewportWidth >= 1100 ? 0.88 : 0.8
 
     const timer = window.setTimeout(() => {
       if (activeNode) {
-        setCenter(activeNode.position.x + 110, activeNode.position.y + 90, {
-          zoom: 1.02,
+        setCenter(activeNode.position.x + 190, activeNode.position.y + 220, {
+          zoom: responsiveZoom,
           duration: 900,
         })
-        return
       }
-
-      fitView({
-        nodes,
-        duration: 900,
-        padding: 0.6,
-        minZoom: 0.42,
-        maxZoom: 0.95,
-      })
     }, 80)
 
     return () => window.clearTimeout(timer)
-  }, [activeNodeId, edges, fitView, nodes, setCenter])
+  }, [activeNodeId, edges, nodes, setCenter])
 
   return (
     <ReactFlow
@@ -240,7 +300,9 @@ function LessonExplorer({ lesson, onBack }) {
               </button>
               <span className="side-panel__eyebrow">Visao geral da aula</span>
               <h3 className="side-panel__title">{lesson.meta.title}</h3>
-              <p className="details-panel__summary">{lesson.meta.description}</p>
+              <p className="details-panel__summary">
+                {renderHighlightedText(lesson.meta.description)}
+              </p>
               <div className="side-panel__stats">
                 <div>
                   <span className="status-label">Progresso</span>
@@ -332,14 +394,16 @@ function LessonExplorer({ lesson, onBack }) {
                 </span>
               </div>
               <h3>{selectedNode.title}</h3>
-              <p className="details-panel__summary">{selectedNode.summary}</p>
+              <p className="details-panel__summary">
+                {renderHighlightedText(selectedNode.summary)}
+              </p>
 
               {selectedNode.points?.length ? (
                 <>
                   <h4>Pontos principais</h4>
                   <ul className="details-panel__list">
                     {selectedNode.points.map((point) => (
-                      <li key={point}>{point}</li>
+                      <li key={point}>{renderHighlightedText(point)}</li>
                     ))}
                   </ul>
                 </>
@@ -350,7 +414,7 @@ function LessonExplorer({ lesson, onBack }) {
                   <h4>Versiculos</h4>
                   <ul className="details-panel__list details-panel__list--scriptures">
                     {selectedNode.scriptures.map((scripture) => (
-                      <li key={scripture}>{scripture}</li>
+                      <li key={scripture}>{renderHighlightedText(scripture)}</li>
                     ))}
                   </ul>
                 </>

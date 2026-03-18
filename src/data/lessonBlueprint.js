@@ -46,7 +46,7 @@ export const lessonBlueprint = {
     {
       id: 'tema',
       step: 0,
-      position: { x: 60, y: 520 },
+      position: { x: 120, y: 520 },
       title: 'Mordomia, Dizimo e Contribuicao',
       summary: 'Panorama da aula.',
       points: [
@@ -61,7 +61,7 @@ export const lessonBlueprint = {
     {
       id: 'tudo-deus',
       step: 0,
-      position: { x: 520, y: 120 },
+      position: { x: 760, y: 120 },
       title: 'Tudo pertence a Deus',
       summary: 'A contribuicao nasce do reconhecimento da soberania de Deus.',
       points: [
@@ -80,7 +80,7 @@ export const lessonBlueprint = {
     {
       id: 'comprados',
       step: 0,
-      position: { x: 520, y: 760 },
+      position: { x: 760, y: 860 },
       title: 'Fomos comprados por Deus',
       summary: 'Nossa vida e nossos recursos pertencem ao Senhor.',
       points: [
@@ -100,7 +100,7 @@ export const lessonBlueprint = {
     {
       id: 'mordomo',
       step: 1,
-      position: { x: 1080, y: 80 },
+      position: { x: 1540, y: 120 },
       title: 'O cristao como mordomo',
       summary: 'Administracao fiel e parte da vida espiritual.',
       points: [
@@ -118,7 +118,7 @@ export const lessonBlueprint = {
     {
       id: 'significado',
       step: 1,
-      position: { x: 1080, y: 760 },
+      position: { x: 1540, y: 860 },
       title: 'O que significa dizimo',
       summary: 'Dizimo significa decima parte.',
       points: [
@@ -136,7 +136,7 @@ export const lessonBlueprint = {
     {
       id: 'lei-base',
       step: 2,
-      position: { x: 1660, y: 60 },
+      position: { x: 2360, y: 120 },
       title: 'O dizimo na Lei',
       summary: 'Na Lei, o dizimo tinha contexto concreto e agricola.',
       points: [
@@ -154,7 +154,7 @@ export const lessonBlueprint = {
     {
       id: 'para-quem',
       step: 2,
-      position: { x: 1660, y: 760 },
+      position: { x: 2360, y: 860 },
       title: 'Para quem era o dizimo',
       summary: 'O dizimo sustentava servico e pessoas ligadas ao culto.',
       points: [
@@ -172,7 +172,7 @@ export const lessonBlueprint = {
     {
       id: 'tipos',
       step: 3,
-      position: { x: 2260, y: 520 },
+      position: { x: 3180, y: 520 },
       title: 'Tipos de dizimo na Lei',
       summary: 'A Lei apresenta finalidades distintas para o dizimo.',
       points: [
@@ -188,7 +188,7 @@ export const lessonBlueprint = {
     {
       id: 'levita',
       step: 3,
-      position: { x: 2840, y: 20 },
+      position: { x: 3980, y: 20 },
       title: 'Dizimo do levita',
       summary: 'Sustento ministerial regular.',
       points: [
@@ -206,7 +206,7 @@ export const lessonBlueprint = {
     {
       id: 'dizimos-dos-dizimos',
       step: 3,
-      position: { x: 2840, y: 360 },
+      position: { x: 3980, y: 420 },
       title: 'Dizimo dos dizimos',
       summary: 'Os proprios levitas tambem ofertavam.',
       points: [
@@ -223,7 +223,7 @@ export const lessonBlueprint = {
     {
       id: 'comunhao',
       step: 3,
-      position: { x: 2840, y: 700 },
+      position: { x: 3980, y: 820 },
       title: 'Dizimo da comunhao',
       summary: 'Celebracao diante do Senhor.',
       points: [
@@ -240,7 +240,7 @@ export const lessonBlueprint = {
     {
       id: 'pobres',
       step: 3,
-      position: { x: 2840, y: 1040 },
+      position: { x: 3980, y: 1220 },
       title: 'Dizimo dos pobres',
       summary: 'A cada tres anos, com foco nos vulneraveis.',
       points: [
@@ -259,7 +259,7 @@ export const lessonBlueprint = {
     {
       id: 'ofertas',
       step: 4,
-      position: { x: 3480, y: 220 },
+      position: { x: 4860, y: 320 },
       title: 'Outras ofertas',
       summary: 'Deus abriu caminho para todos contribuirem.',
       points: [
@@ -284,7 +284,7 @@ export const lessonBlueprint = {
     {
       id: 'quebra',
       step: 4,
-      position: { x: 3480, y: 860 },
+      position: { x: 4860, y: 980 },
       title: 'Quebra da Lei',
       summary: 'A negligencia afetava culto e justica social.',
       points: [
@@ -304,7 +304,7 @@ export const lessonBlueprint = {
     {
       id: 'novo-testamento',
       step: 5,
-      position: { x: 4140, y: 80 },
+      position: { x: 5760, y: 140 },
       title: 'O dizimo no Novo Testamento',
       summary: 'Jesus fala do assunto no contexto da Lei.',
       points: [
@@ -322,7 +322,7 @@ export const lessonBlueprint = {
     {
       id: 'nova-perspectiva',
       step: 5,
-      position: { x: 4140, y: 620 },
+      position: { x: 5760, y: 760 },
       title: 'Nova perspectiva sobre ofertas',
       summary: 'O Novo Testamento desloca a enfase para o coracao.',
       points: [
@@ -348,7 +348,7 @@ export const lessonBlueprint = {
     {
       id: 'igreja',
       step: 5,
-      position: { x: 4140, y: 1220 },
+      position: { x: 5760, y: 1400 },
       title: 'Igreja primitiva',
       summary: 'A contribuicao aparece como expressao de cuidado e generosidade.',
       points: [
@@ -370,7 +370,7 @@ export const lessonBlueprint = {
     {
       id: 'conclusao',
       step: 5,
-      position: { x: 4820, y: 620 },
+      position: { x: 6640, y: 760 },
       title: 'Conclusao central',
       summary: 'O eixo da aula termina no senhorio de Deus sobre o coracao.',
       points: [
