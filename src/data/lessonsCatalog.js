@@ -13,6 +13,12 @@ export const lessonsCatalog = [
     source: {
       content: mordomiaContent,
       layout: mordomiaLayout,
+      files: {
+        contentPath: 'src/data/lessons/mordomiaContent.js',
+        layoutPath: 'src/data/lessons/mordomiaLayout.js',
+        contentExportName: 'mordomiaContent',
+        layoutExportName: 'mordomiaLayout',
+      },
     },
   },
 ]

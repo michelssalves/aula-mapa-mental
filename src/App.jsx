@@ -5,6 +5,7 @@ import { buildLessonBlueprint } from './data/buildLessonBlueprint'
 import { lessonsCatalog } from './data/lessonsCatalog'
 import { LessonAdmin } from './components/LessonAdmin'
 import { LessonExplorer } from './components/LessonExplorer'
+import { saveLessonToRepository } from './utils/cloudSave'
 import {
   clearSavedDraft,
   createDraft,
@@ -244,6 +245,13 @@ function App() {
             [activeLessonEntry.id]: originalDraft,
           }))
         }}
+        onSaveToRepo={(draftToSave) =>
+          saveLessonToRepository({
+            lessonId: activeLessonEntry.id,
+            draft: draftToSave,
+            files: activeLessonEntry.source.files,
+          })
+        }
       />
     )
   }

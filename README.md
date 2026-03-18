@@ -62,3 +62,43 @@ No editor visual você consegue:
 - editar título, resumo, pontos, versículos, etapa e cor de cada card
 - arrastar cards no mapa para ajustar a posição visual
 - exportar `mordomiaContent.js` e `mordomiaLayout.js`
+
+## Salvar no repositorio com Cloudflare
+
+O projeto tambem esta preparado para usar `Cloudflare Pages Functions` e salvar a aula direto no repositorio GitHub.
+
+Arquivos principais dessa integracao:
+
+- `functions/api/save-lesson.js`
+  endpoint serverless que grava `content` e `layout` via GitHub API
+- `src/utils/cloudSave.js`
+  chamada do frontend para `/api/save-lesson`
+- `wrangler.toml`
+  configuracao base do projeto para Cloudflare
+- `.dev.vars.example`
+  exemplo das variaveis necessarias
+
+Variaveis de ambiente necessarias:
+
+- `GITHUB_TOKEN`
+- `GITHUB_OWNER`
+- `GITHUB_REPO`
+- `GITHUB_BRANCH`
+- `GITHUB_COMMIT_PREFIX`
+
+Rodando localmente com Cloudflare:
+
+```bash
+npm.cmd install
+npm.cmd run build
+npm.cmd run cf:dev
+```
+
+No editor, use o botao de nuvem para `Salvar no repositorio`.
+
+Para deploy no Cloudflare Pages:
+
+1. conecte o repositorio no Cloudflare Pages
+2. use `npm run build` como build command
+3. use `dist` como output directory
+4. cadastre as variaveis do GitHub no painel do Cloudflare

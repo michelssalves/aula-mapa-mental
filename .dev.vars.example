@@ -1,0 +1,5 @@
+GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxx
+GITHUB_OWNER=michelssalves
+GITHUB_REPO=aula-mapa-mental
+GITHUB_BRANCH=main
+GITHUB_COMMIT_PREFIX=Atualiza aula

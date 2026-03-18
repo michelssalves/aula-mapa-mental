@@ -146,6 +146,16 @@ function DownloadIcon() {
   )
 }
 
+function CloudUploadIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+      <path d="M7 18a4 4 0 1 1 .7-7.94A5.5 5.5 0 0 1 18 11a3.5 3.5 0 1 1-.5 7H7Z" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12 10v7" strokeLinecap="round" />
+      <path d="m9 13 3-3 3 3" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
 function BookIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
@@ -377,6 +387,7 @@ export function LessonAdmin({
   onSaveDraft,
   onRestoreSavedDraft,
   onResetDraft,
+  onSaveToRepo,
 }) {
   const [selectedNodeId, setSelectedNodeId] = useState(
     draft.content.nodes[0]?.id ?? null,
@@ -386,6 +397,7 @@ export function LessonAdmin({
   const [draggedNodeIndex, setDraggedNodeIndex] = useState(null)
   const [stepSearch, setStepSearch] = useState('')
   const [nodeSearch, setNodeSearch] = useState('')
+  const [isSavingToRepo, setIsSavingToRepo] = useState(false)
   const effectiveSelectedNodeId = draft.content.nodes.some(
     (node) => node.id === selectedNodeId,
   )
@@ -1043,6 +1055,25 @@ export function LessonAdmin({
     setStatusMessage('Editor restaurado para a versão original da aula.')
   }
 
+
+  const handleSaveToRepo = async () => {
+    if (!onSaveToRepo) {
+      setStatusMessage('Salvamento remoto nao configurado para esta aula.')
+      return
+    }
+
+    try {
+      setIsSavingToRepo(true)
+      const result = await onSaveToRepo(draft)
+      setStatusMessage(
+        result?.message ?? 'Alteracoes enviadas para o repositorio com sucesso.',
+      )
+    } catch (error) {
+      setStatusMessage(error.message)
+    } finally {
+      setIsSavingToRepo(false)
+    }
+  }
   return (
     <main className="admin-shell">
       <header className="admin-header">
@@ -1282,6 +1313,14 @@ export function LessonAdmin({
             <ActionGroup label="Projeto">
               <IconButton label="Salvar rascunho" variant="success" onClick={handleSaveDraft}>
                 <SaveIcon />
+              </IconButton>
+              <IconButton
+                label="Salvar no repositorio"
+                variant="accent"
+                onClick={handleSaveToRepo}
+                disabled={isSavingToRepo}
+              >
+                <CloudUploadIcon />
               </IconButton>
               <IconButton label="Restaurar ultimo salvo" variant="info" onClick={handleRestoreSavedDraft}>
                 <RefreshIcon />
