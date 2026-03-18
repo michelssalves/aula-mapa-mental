@@ -27,7 +27,7 @@ export const mordomiaContent = {
       id: 'step-4',
       title: 'Destinação e tipos de dízimo',
       summary: 'A Lei mostra finalidades diferentes: levitas, sacerdotes, comunhão e pobres.',
-      focus: 'A contribuição no Antigo Testamento tinha função litúrgica e social.',
+      focus: 'A contribuição no Antigo Testamento tinha função litúrgica e social.;',
     },
     {
       id: 'step-5',
