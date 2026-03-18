@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import {
   Background,
   Controls,
+  Handle,
   MarkerType,
   Position,
   ReactFlow,
@@ -17,28 +18,24 @@ function LessonNode({ data }) {
     <article
       className={`lesson-node lesson-node--${data.tone} ${data.isActiveStep ? 'lesson-node--active-step' : ''} ${data.isSelected ? 'lesson-node--selected' : ''}`}
     >
-      <span className="lesson-node__tag">{data.tag}</span>
+      <Handle type="target" position={Position.Left} className="lesson-node__handle" />
+      <div className="lesson-node__topline">
+        <span className="lesson-node__tag">{data.tag}</span>
+        {data.isActiveStep ? (
+          <span className="lesson-node__focus-badge">Em foco</span>
+        ) : null}
+      </div>
       <h3>{data.title}</h3>
       {data.summary ? <p className="lesson-node__summary">{data.summary}</p> : null}
 
-      {data.points?.length ? (
+      {data.previewPoints?.length ? (
         <ul className="lesson-node__list">
-          {data.points.map((point) => (
+          {data.previewPoints.map((point) => (
             <li key={point}>{point}</li>
           ))}
         </ul>
       ) : null}
-
-      {data.scriptures?.length ? (
-        <div className="lesson-node__scriptures">
-          <strong>Textos</strong>
-          <ul className="lesson-node__scripture-list">
-            {data.scriptures.map((scripture) => (
-              <li key={scripture}>{scripture}</li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
+      <Handle type="source" position={Position.Right} className="lesson-node__handle" />
     </article>
   )
 }
@@ -47,24 +44,39 @@ const nodeTypes = {
   lessonNode: LessonNode,
 }
 
-function MindMapCanvas({ nodes, edges, activeStep, onNodeSelect }) {
-  const { fitView } = useReactFlow()
+const toneEdgeColors = {
+  sun: '#d18817',
+  sky: '#3a7bd5',
+  mint: '#149f6a',
+  rose: '#c45c47',
+}
+
+function MindMapCanvas({ nodes, edges, activeNodeId, onNodeSelect }) {
+  const { fitView, setCenter } = useReactFlow()
 
   useEffect(() => {
-    const focusNodes = nodes.filter((node) => node.data.isActiveStep)
-    const nodesToFit = focusNodes.length ? focusNodes : nodes
+    const activeNode = nodes.find((node) => node.id === activeNodeId)
 
     const timer = window.setTimeout(() => {
+      if (activeNode) {
+        setCenter(activeNode.position.x + 110, activeNode.position.y + 90, {
+          zoom: 1.02,
+          duration: 900,
+        })
+        return
+      }
+
       fitView({
-        nodes: nodesToFit,
+        nodes,
         duration: 900,
-        padding: nodesToFit.length > 1 ? 0.3 : 0.55,
-        maxZoom: nodesToFit.length > 1 ? 0.92 : 0.98,
+        padding: 0.6,
+        minZoom: 0.42,
+        maxZoom: 0.95,
       })
     }, 80)
 
     return () => window.clearTimeout(timer)
-  }, [activeStep, fitView, nodes])
+  }, [activeNodeId, edges, fitView, nodes, setCenter])
 
   return (
     <ReactFlow
@@ -81,223 +93,335 @@ function MindMapCanvas({ nodes, edges, activeStep, onNodeSelect }) {
       maxZoom={1.5}
     >
       <Background gap={28} size={1.3} color="rgba(64, 51, 28, 0.12)" />
-      <Controls showInteractive={false} position="bottom-right" />
+      <Controls
+        showInteractive={false}
+        position="bottom-center"
+        orientation="horizontal"
+      />
     </ReactFlow>
   )
 }
 
 function LessonExplorer({ lesson, onBack }) {
-  const [activeStep, setActiveStep] = useState(0)
+  const [activeNodeIndex, setActiveNodeIndex] = useState(0)
+  const [unlockedNodeIndex, setUnlockedNodeIndex] = useState(0)
   const [selectedNodeId, setSelectedNodeId] = useState(
-    lesson.nodes.find((node) => node.step === 0)?.id ?? null,
+    lesson.nodes[0]?.id ?? null,
   )
+  const [leftPanel, setLeftPanel] = useState(null)
+  const [detailsOpen, setDetailsOpen] = useState(false)
 
-  const totalSteps = lesson.steps.length
-  const isFirstStep = activeStep === 0
-  const isLastStep = activeStep === totalSteps - 1
-  const visibleBlueprintNodes = lesson.nodes.filter((node) => node.step <= activeStep)
-  const activeStepFirstNodeId =
-    lesson.nodes.find((node) => node.step === activeStep)?.id ?? null
+  const totalNodes = lesson.nodes.length
+  const currentNode = lesson.nodes[activeNodeIndex] ?? lesson.nodes[0]
+  const activeStep = currentNode.step
+  const isFirstStep = activeNodeIndex === 0
+  const isLastStep = unlockedNodeIndex === totalNodes - 1
+  const visibleBlueprintNodes = lesson.nodes.slice(0, unlockedNodeIndex + 1)
+  const activeStepFirstNodeId = currentNode?.id ?? null
   const effectiveSelectedNodeId = visibleBlueprintNodes.some(
     (node) => node.id === selectedNodeId,
   )
     ? selectedNodeId
     : activeStepFirstNodeId
 
-  const visibleNodes = visibleBlueprintNodes.map((node) => ({
-    id: node.id,
-    type: 'lessonNode',
-    position: node.position,
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    data: {
-      title: node.title,
-      summary: node.summary,
-      points: node.points,
-      scriptures: node.scriptures,
-      tag: node.tag,
-      tone: node.tone,
-      isActiveStep: node.step === activeStep,
-      isSelected: node.id === effectiveSelectedNodeId,
-    },
-  }))
+  const visibleNodes = visibleBlueprintNodes.map((node) => {
+    const nodeIndex = lesson.nodes.findIndex((lessonNode) => lessonNode.id === node.id)
 
-  const visibleEdges = lesson.edges
-    .filter((edge) => edge.step <= activeStep)
-    .map((edge) => ({
-      id: edge.id,
-      source: edge.source,
-      target: edge.target,
-      animated: edge.step === activeStep,
+    return {
+      id: node.id,
+      type: 'lessonNode',
+      position: node.position,
+      sourcePosition: Position.Right,
+      targetPosition: Position.Left,
+      data: {
+        title: node.title,
+        summary: node.summary,
+        previewPoints: node.points?.slice(0, 3) ?? [],
+        points: node.points,
+        scriptures: node.scriptures,
+        tag: String(nodeIndex + 1).padStart(2, '0'),
+        tone: node.tone,
+        isActiveStep: node.id === currentNode.id,
+        isSelected: node.id === effectiveSelectedNodeId,
+      },
+    }
+  })
+
+  const visibleEdges = visibleBlueprintNodes.slice(1).map((node, index) => {
+    const previousNode = visibleBlueprintNodes[index]
+    const edgeColor = toneEdgeColors[node.tone] ?? '#3a7bd5'
+
+    return {
+      id: `sequence-${previousNode.id}-${node.id}`,
+      source: previousNode.id,
+      target: node.id,
+      animated: node.id === currentNode.id,
       type: 'smoothstep',
       pathOptions: {
         borderRadius: 24,
         offset: 28,
       },
       style: {
-        stroke: edge.color,
-        strokeWidth: edge.step === activeStep ? 4.5 : 3,
-        opacity: edge.step === activeStep ? 1 : 0.78,
+        stroke: node.id === currentNode.id ? '#d96f2d' : edgeColor,
+        strokeWidth: node.id === currentNode.id ? 4.5 : 3,
+        opacity: node.id === currentNode.id ? 1 : 0.78,
       },
       markerEnd: {
         type: MarkerType.ArrowClosed,
         width: 18,
         height: 18,
-        color: edge.color,
+        color: node.id === currentNode.id ? '#d96f2d' : edgeColor,
       },
-    }))
+    }
+  })
 
   const selectedNode =
     visibleBlueprintNodes.find((node) => node.id === effectiveSelectedNodeId) ??
     visibleBlueprintNodes[0] ??
     null
 
-  const progress = Math.round(((activeStep + 1) / totalSteps) * 100)
+  const progress = Math.round(((activeNodeIndex + 1) / totalNodes) * 100)
+  const handlePrevious = () => {
+    const nextIndex = Math.max(activeNodeIndex - 1, 0)
+    setActiveNodeIndex(nextIndex)
+    setSelectedNodeId(lesson.nodes[nextIndex]?.id ?? null)
+  }
+
+  const handleNext = () => {
+    const nextIndex = Math.min(activeNodeIndex + 1, totalNodes - 1)
+    setActiveNodeIndex(nextIndex)
+    setUnlockedNodeIndex((currentUnlocked) => Math.max(currentUnlocked, nextIndex))
+    setSelectedNodeId(lesson.nodes[nextIndex]?.id ?? null)
+  }
+
+  const handleTimelineSelect = (nodeIndex) => {
+    if (nodeIndex >= 0 && nodeIndex < totalNodes) {
+      setActiveNodeIndex(nodeIndex)
+      setUnlockedNodeIndex((currentUnlocked) => Math.max(currentUnlocked, nodeIndex))
+      setSelectedNodeId(lesson.nodes[nodeIndex]?.id ?? null)
+    }
+  }
 
   return (
-    <main className="app-shell">
-      <section className="hero-panel">
-        <div className="hero-panel__copy">
-          <button type="button" className="back-link" onClick={onBack}>
-            Voltar para o catalogo
-          </button>
-          <span className="eyebrow">Aula em mapa mental interativo</span>
-          <h1>{lesson.meta.title}</h1>
-          <p className="hero-panel__lead">{lesson.meta.description}</p>
-        </div>
-
-        <div className="hero-panel__status">
-          <div>
-            <span className="status-label">Progresso</span>
-            <strong>{progress}%</strong>
-          </div>
-          <div>
-            <span className="status-label">Etapa atual</span>
-            <strong>{lesson.steps[activeStep].title}</strong>
-          </div>
-          <div>
-            <span className="status-label">Destaque</span>
-            <strong>{lesson.steps[activeStep].focus}</strong>
-          </div>
+    <main className="app-shell app-shell--focus">
+      <section className="canvas-panel canvas-panel--focus">
+        <div className="canvas-frame canvas-frame--focus">
+          <ReactFlowProvider>
+            <MindMapCanvas
+              nodes={visibleNodes}
+              edges={visibleEdges}
+              activeNodeId={currentNode.id}
+              onNodeSelect={(nodeId) => {
+                setSelectedNodeId(nodeId)
+                setDetailsOpen(true)
+              }}
+            />
+          </ReactFlowProvider>
         </div>
       </section>
 
-      <section className="workspace">
-        <aside className="timeline-panel">
-          <div className="timeline-panel__header">
-            <span className="eyebrow">Linha da aula</span>
-            <h2>Avance no ritmo da explicacao</h2>
-            <p>
-              Cada clique libera os proximos blocos do conteudo e reforca a
-              narrativa visual da aula.
-            </p>
+      <aside className={`side-panel ${leftPanel ? 'side-panel--open' : ''}`}>
+        <div className="side-panel__header">
+          <strong>{leftPanel === 'overview' ? 'Resumo' : leftPanel === 'timeline' ? 'Linha da aula' : ''}</strong>
+          <button
+            type="button"
+            className="side-panel__close"
+            onClick={() => setLeftPanel(null)}
+          >
+            Fechar
+          </button>
+        </div>
+
+        <div className="side-panel__body">
+          {leftPanel === 'overview' ? (
+            <>
+              <button type="button" className="back-link" onClick={onBack}>
+                Voltar para o catalogo
+              </button>
+              <span className="side-panel__eyebrow">Visao geral da aula</span>
+              <h3 className="side-panel__title">{lesson.meta.title}</h3>
+              <p className="details-panel__summary">{lesson.meta.description}</p>
+              <div className="side-panel__stats">
+                <div>
+                  <span className="status-label">Progresso</span>
+                  <strong>{progress}%</strong>
+                </div>
+                <div>
+                  <span className="status-label">Etapa atual</span>
+                  <strong>{lesson.steps[activeStep].title}</strong>
+                </div>
+                <div>
+                  <span className="status-label">Card atual</span>
+                  <strong>
+                    {activeNodeIndex + 1} de {totalNodes}
+                  </strong>
+                </div>
+                <div>
+                  <span className="status-label">Destaque</span>
+                  <strong>{currentNode.title}</strong>
+                </div>
+              </div>
+            </>
+          ) : null}
+
+          {leftPanel === 'timeline' ? (
+            <>
+              <div className="timeline-panel__hero">
+                <span className="eyebrow">Navegacao da aula</span>
+                <h3>Todos os cards da apresentacao</h3>
+                <p>Selecione qualquer ponto da narrativa para ir direto ao card correspondente.</p>
+              </div>
+
+              <ol className="timeline-list">
+                {lesson.nodes.map((node, index) => {
+                  const state =
+                    index < unlockedNodeIndex
+                      ? 'done'
+                      : index === activeNodeIndex
+                        ? 'current'
+                        : 'upcoming'
+
+                  return (
+                    <li key={node.id}>
+                      <button
+                        type="button"
+                        className={`timeline-item timeline-item--${state}`}
+                        onClick={() => handleTimelineSelect(index)}
+                      >
+                        <span className="timeline-item__index">
+                          {String(index + 1).padStart(2, '0')}
+                        </span>
+                        <div className="timeline-item__content">
+                          <span className="timeline-item__section">
+                            {lesson.steps[node.step].title}
+                          </span>
+                          <strong>{node.title}</strong>
+                          <p>{node.summary}</p>
+                        </div>
+                      </button>
+                    </li>
+                  )
+                })}
+              </ol>
+            </>
+          ) : null}
+        </div>
+      </aside>
+
+      <aside className={`side-panel side-panel--right ${detailsOpen ? 'side-panel--open' : ''}`}>
+        <div className="side-panel__header">
+          <strong>Detalhes</strong>
+          <button
+            type="button"
+            className="side-panel__close"
+            onClick={() => setDetailsOpen(false)}
+          >
+            Fechar
+          </button>
+        </div>
+
+        <div className="side-panel__body">
+          {selectedNode ? (
+            <>
+              <div className="details-panel__hero">
+                <span className="details-panel__number">
+                  Card {String(lesson.nodes.findIndex((node) => node.id === selectedNode.id) + 1).padStart(2, '0')}
+                </span>
+                <span className="details-panel__section">
+                  {lesson.steps[selectedNode.step].title}
+                </span>
+              </div>
+              <h3>{selectedNode.title}</h3>
+              <p className="details-panel__summary">{selectedNode.summary}</p>
+
+              {selectedNode.points?.length ? (
+                <>
+                  <h4>Pontos principais</h4>
+                  <ul className="details-panel__list">
+                    {selectedNode.points.map((point) => (
+                      <li key={point}>{point}</li>
+                    ))}
+                  </ul>
+                </>
+              ) : null}
+
+              {selectedNode.scriptures?.length ? (
+                <>
+                  <h4>Versiculos</h4>
+                  <ul className="details-panel__list details-panel__list--scriptures">
+                    {selectedNode.scriptures.map((scripture) => (
+                      <li key={scripture}>{scripture}</li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <p className="details-panel__empty">
+                  Este card funciona como organizador da narrativa.
+                </p>
+              )}
+            </>
+          ) : null}
+        </div>
+      </aside>
+
+      <div className="floating-menu">
+        <div className="floating-nav">
+          <div className="floating-nav__group">
+            <button
+              type="button"
+              className={`toolbar-button ${leftPanel === 'overview' ? 'toolbar-button--active' : ''}`}
+              onClick={() =>
+                setLeftPanel((value) => (value === 'overview' ? null : 'overview'))
+              }
+            >
+              Resumo
+            </button>
+            <button
+              type="button"
+              className={`toolbar-button ${leftPanel === 'timeline' ? 'toolbar-button--active' : ''}`}
+              onClick={() =>
+                setLeftPanel((value) => (value === 'timeline' ? null : 'timeline'))
+              }
+            >
+              Linha da aula
+            </button>
+            <button
+              type="button"
+              className={`toolbar-button ${detailsOpen ? 'toolbar-button--active' : ''}`}
+              onClick={() => setDetailsOpen((value) => !value)}
+            >
+              Detalhes
+            </button>
           </div>
 
-          <ol className="timeline-list">
-            {lesson.steps.map((step, index) => {
-              const state =
-                index < activeStep
-                  ? 'done'
-                  : index === activeStep
-                    ? 'current'
-                    : 'upcoming'
+          <div className="floating-nav__divider"></div>
 
-              return (
-                <li key={step.id} className={`timeline-item timeline-item--${state}`}>
-                  <span className="timeline-item__index">
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                  <div>
-                    <strong>{step.title}</strong>
-                    <p>{step.summary}</p>
-                  </div>
-                </li>
-              )
-            })}
-          </ol>
-
-          <div className="timeline-panel__actions">
+          <div className="floating-nav__group">
+            <div className="floating-nav__progress">
+              <span>Progresso</span>
+              <strong>
+                {String(activeNodeIndex + 1).padStart(2, '0')} / {String(totalNodes).padStart(2, '0')}
+              </strong>
+            </div>
             <button
               type="button"
               className="ghost-button"
-              onClick={() => setActiveStep((step) => Math.max(step - 1, 0))}
+              onClick={handlePrevious}
               disabled={isFirstStep}
             >
               Voltar
             </button>
-
-            <button
-              type="button"
-              className="primary-button"
-              onClick={() =>
-                setActiveStep((step) => Math.min(step + 1, totalSteps - 1))
-              }
-              disabled={isLastStep}
-            >
+          <button
+            type="button"
+            className={`primary-button ${!isLastStep ? 'primary-button--next' : ''}`}
+            onClick={handleNext}
+            disabled={isLastStep}
+          >
               {isLastStep ? 'Aula completa' : 'Avancar'}
             </button>
           </div>
-        </aside>
-
-        <section className="canvas-panel">
-          <header className="canvas-panel__header">
-            <div>
-              <span className="eyebrow">Mapa mental</span>
-              <h2>{lesson.steps[activeStep].title}</h2>
-            </div>
-            <p>{lesson.steps[activeStep].focus}</p>
-          </header>
-
-          <div className="canvas-content">
-            <div className="canvas-frame">
-              <ReactFlowProvider>
-                <MindMapCanvas
-                  nodes={visibleNodes}
-                  edges={visibleEdges}
-                  activeStep={activeStep}
-                  onNodeSelect={setSelectedNodeId}
-                />
-              </ReactFlowProvider>
-            </div>
-
-            <aside className="details-panel">
-              {selectedNode ? (
-                <>
-                  <span className="eyebrow">Card selecionado</span>
-                  <h3>{selectedNode.title}</h3>
-                  <p className="details-panel__summary">{selectedNode.summary}</p>
-
-                  {selectedNode.points?.length ? (
-                    <>
-                      <h4>Pontos principais</h4>
-                      <ul className="details-panel__list">
-                        {selectedNode.points.map((point) => (
-                          <li key={point}>{point}</li>
-                        ))}
-                      </ul>
-                    </>
-                  ) : null}
-
-                  {selectedNode.scriptures?.length ? (
-                    <>
-                      <h4>Versiculos</h4>
-                      <ul className="details-panel__list details-panel__list--scriptures">
-                        {selectedNode.scriptures.map((scripture) => (
-                          <li key={scripture}>{scripture}</li>
-                        ))}
-                      </ul>
-                    </>
-                  ) : (
-                    <p className="details-panel__empty">
-                      Este card funciona como organizador da narrativa.
-                    </p>
-                  )}
-                </>
-              ) : null}
-            </aside>
-          </div>
-        </section>
-      </section>
+        </div>
+      </div>
     </main>
   )
 }
