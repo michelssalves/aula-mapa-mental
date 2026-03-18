@@ -1,4 +1,3 @@
-import { useEffect, useMemo, useState } from 'react'
 import {
   applyNodeChanges,
   Background,
@@ -8,11 +7,212 @@ import {
   ReactFlow,
   ReactFlowProvider,
 } from '@xyflow/react'
-import { LessonNode } from './LessonNode'
+import { useEffect, useMemo, useState } from 'react'
 import { toneEdgeColors } from '../utils/lessonUtils'
+import { LessonNode } from './LessonNode'
 
 const nodeTypes = {
   lessonNode: LessonNode,
+}
+
+function Icon({ children }) {
+  return (
+    <span className="icon-button__glyph" aria-hidden="true">
+      {children}
+    </span>
+  )
+}
+
+function IconButton({
+  label,
+  children,
+  className = '',
+  title,
+  variant = 'default',
+  ...props
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      title={title ?? label}
+      className={`icon-button icon-button--${variant} ${className}`.trim()}
+      {...props}
+    >
+      <Icon>{children}</Icon>
+    </button>
+  )
+}
+
+function ActionGroup({ label, children, className = '' }) {
+  return (
+    <div className={`admin-action-group ${className}`.trim()}>
+      <span className="admin-action-group__label">{label}</span>
+      <div className="admin-action-group__buttons">{children}</div>
+    </div>
+  )
+}
+
+function ArrowUpIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+      <path d="M12 18V6" strokeLinecap="round" />
+      <path d="m7 11 5-5 5 5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function ArrowDownIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+      <path d="M12 6v12" strokeLinecap="round" />
+      <path d="m17 13-5 5-5-5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function PlusIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+      <path d="M12 5v14M5 12h14" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function CopyIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+      <rect x="9" y="9" width="10" height="10" rx="2" />
+      <path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function TrashIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+      <path d="M4 7h16" strokeLinecap="round" />
+      <path d="M10 11v6M14 11v6" strokeLinecap="round" />
+      <path d="M6 7l1 11a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-11" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function SaveIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+      <path d="M5 4h11l3 3v12a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4Z" strokeLinejoin="round" />
+      <path d="M8 4v5h8V6.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8 20v-6h8v6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function RefreshIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+      <path d="M20 11a8 8 0 1 0 2 5.5" strokeLinecap="round" />
+      <path d="M20 5v6h-6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function ResetIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+      <path d="M3 12a9 9 0 1 0 3-6.7" strokeLinecap="round" />
+      <path d="M3 4v5h5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function EyeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+      <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  )
+}
+
+function DownloadIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+      <path d="M12 4v11" strokeLinecap="round" />
+      <path d="m7 11 5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5 20h14" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function BookIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+      <path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H19v17H7.5A2.5 2.5 0 0 0 5 21.5" strokeLinejoin="round" />
+      <path d="M5 4.5v17" strokeLinecap="round" />
+      <path d="M9 6h6" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function LayersIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+      <path d="m12 4 8 4-8 4-8-4 8-4Z" strokeLinejoin="round" />
+      <path d="m4 12 8 4 8-4" strokeLinejoin="round" />
+      <path d="m4 16 8 4 8-4" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function CardStackIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+      <rect x="5" y="7" width="14" height="10" rx="2" />
+      <path d="M8 4h8a2 2 0 0 1 2 2" strokeLinecap="round" />
+      <path d="M8 20h8a2 2 0 0 0 2-2" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function EditIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+      <path d="m4 20 4.5-1 9-9-3.5-3.5-9 9L4 20Z" strokeLinejoin="round" />
+      <path d="m13.5 6.5 3.5 3.5" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function ExportIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+      <path d="M12 3v12" strokeLinecap="round" />
+      <path d="m8 7 4-4 4 4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function SectionTitle({ icon, children, tone = 'default' }) {
+  return (
+    <span className={`admin-section-title admin-section-title--${tone}`}>
+      <span className="admin-section-title__icon" aria-hidden="true">
+        {icon}
+      </span>
+      <strong>{children}</strong>
+    </span>
+  )
+}
+
+function FoldSection({ title, children, defaultOpen = true }) {
+  return (
+    <details className="admin-fold" open={defaultOpen}>
+      <summary className="admin-fold__summary">{title}</summary>
+      <div className="admin-fold__body">{children}</div>
+    </details>
+  )
 }
 
 function slugify(value) {
@@ -94,6 +294,13 @@ function swapItems(list, firstIndex, secondIndex) {
   return nextList
 }
 
+function moveItem(list, fromIndex, toIndex) {
+  const nextList = [...list]
+  const [item] = nextList.splice(fromIndex, 1)
+  nextList.splice(toIndex, 0, item)
+  return nextList
+}
+
 function splitTextareaList(value) {
   return value
     .split('\n')
@@ -103,6 +310,10 @@ function splitTextareaList(value) {
 
 function serializeModuleExport(exportName, value) {
   return `export const ${exportName} = ${JSON.stringify(value, null, 2)}\n`
+}
+
+function findFirstNodeInStep(nodes, stepIndex) {
+  return nodes.find((node) => node.step === stepIndex) ?? null
 }
 
 function AdminCanvas({
@@ -171,6 +382,10 @@ export function LessonAdmin({
     draft.content.nodes[0]?.id ?? null,
   )
   const [statusMessage, setStatusMessage] = useState('')
+  const [draggedStepIndex, setDraggedStepIndex] = useState(null)
+  const [draggedNodeIndex, setDraggedNodeIndex] = useState(null)
+  const [stepSearch, setStepSearch] = useState('')
+  const [nodeSearch, setNodeSearch] = useState('')
   const effectiveSelectedNodeId = draft.content.nodes.some(
     (node) => node.id === selectedNodeId,
   )
@@ -187,6 +402,37 @@ export function LessonAdmin({
   const selectedNodeIndex = draft.content.nodes.findIndex(
     (node) => node.id === effectiveSelectedNodeId,
   )
+  const normalizedStepSearch = stepSearch.trim().toLowerCase()
+  const normalizedNodeSearch = nodeSearch.trim().toLowerCase()
+  const visibleSteps = draft.content.steps
+    .map((step, index) => ({ step, index }))
+    .filter(({ step }) => {
+      if (!normalizedStepSearch) {
+        return true
+      }
+
+      return `${step.title} ${step.summary} ${step.focus}`
+        .toLowerCase()
+        .includes(normalizedStepSearch)
+    })
+  const visibleNodes = draft.content.nodes
+    .map((node, index) => ({ node, index }))
+    .filter(({ node }) => {
+      if (!normalizedNodeSearch) {
+        return true
+      }
+
+      return [
+        node.title,
+        node.summary,
+        draft.content.steps[node.step]?.title ?? '',
+        ...(node.points ?? []),
+        ...(node.scriptures ?? []),
+      ]
+        .join(' ')
+        .toLowerCase()
+        .includes(normalizedNodeSearch)
+    })
 
   const adminNodes = draft.content.nodes.map((node, index) => ({
     id: node.id,
@@ -247,6 +493,14 @@ export function LessonAdmin({
     onDraftChange(updater(draft))
   }
 
+  const focusStep = (stepIndex) => {
+    const firstNodeInStep = findFirstNodeInStep(draft.content.nodes, stepIndex)
+
+    if (firstNodeInStep) {
+      setSelectedNodeId(firstNodeInStep.id)
+    }
+  }
+
   const updateMeta = (field, value) => {
     updateDraft((currentDraft) => ({
       ...currentDraft,
@@ -272,8 +526,7 @@ export function LessonAdmin({
     }))
   }
 
-  const handleCreateStep = () => {
-    const referenceStepIndex = selectedNode?.step ?? draft.content.steps.length - 1
+  const handleCreateStep = (referenceStepIndex = selectedNode?.step ?? draft.content.steps.length - 1) => {
     const insertIndex = Math.max(referenceStepIndex + 1, 0)
     const newStep = {
       id: buildUniqueStepId(draft.content.steps),
@@ -303,17 +556,17 @@ export function LessonAdmin({
     setStatusMessage('Nova etapa criada.')
   }
 
-  const handleDuplicateStep = () => {
-    if (!selectedStep) {
+  const handleDuplicateStep = (sourceStepIndex = selectedNode?.step ?? 0) => {
+    const sourceStep = draft.content.steps[sourceStepIndex]
+
+    if (!sourceStep) {
       return
     }
-
-    const sourceStepIndex = selectedNode?.step ?? 0
     const insertIndex = sourceStepIndex + 1
     const duplicatedStep = {
-      ...selectedStep,
+      ...sourceStep,
       id: buildUniqueStepId(draft.content.steps),
-      title: `${selectedStep.title} (Copia)`,
+      title: `${sourceStep.title} (Copia)`,
     }
 
     updateDraft((currentDraft) => {
@@ -486,6 +739,45 @@ export function LessonAdmin({
     )
   }
 
+  const handleMoveStepToIndex = (fromIndex, toIndex) => {
+    if (
+      fromIndex === toIndex ||
+      fromIndex < 0 ||
+      toIndex < 0 ||
+      fromIndex >= draft.content.steps.length ||
+      toIndex >= draft.content.steps.length
+    ) {
+      return
+    }
+
+    updateDraft((currentDraft) => {
+      const originalIndexes = currentDraft.content.steps.map((_, index) => index)
+      const reorderedIndexes = moveItem(originalIndexes, fromIndex, toIndex)
+      const nextSteps = moveItem(currentDraft.content.steps, fromIndex, toIndex)
+      const stepIndexMap = {}
+
+      reorderedIndexes.forEach((oldIndex, newIndex) => {
+        stepIndexMap[oldIndex] = newIndex
+      })
+
+      const nextNodes = currentDraft.content.nodes.map((node) => ({
+        ...node,
+        step: stepIndexMap[node.step] ?? node.step,
+      }))
+
+      return {
+        content: {
+          ...currentDraft.content,
+          steps: nextSteps,
+          nodes: nextNodes,
+        },
+        layout: syncLayoutWithNodes(nextNodes, currentDraft.layout),
+      }
+    })
+
+    setStatusMessage('Etapa reposicionada na lista.')
+  }
+
   const updateNode = (nodeId, field, value) => {
     updateDraft((currentDraft) => {
       const nextNodes = currentDraft.content.nodes.map((node) =>
@@ -516,11 +808,12 @@ export function LessonAdmin({
     }))
   }
 
-  const handleCreateNode = () => {
-    const referenceNode =
-      selectedNode ?? draft.content.nodes[draft.content.nodes.length - 1]
-    const insertIndex = selectedNode
-      ? draft.content.nodes.findIndex((node) => node.id === selectedNode.id) + 1
+  const handleCreateNode = (referenceNodeId = selectedNode?.id ?? null) => {
+    const referenceNode = referenceNodeId
+      ? draft.content.nodes.find((node) => node.id === referenceNodeId)
+      : draft.content.nodes[draft.content.nodes.length - 1]
+    const insertIndex = referenceNode
+      ? draft.content.nodes.findIndex((node) => node.id === referenceNode.id) + 1
       : draft.content.nodes.length
     const newTitle = 'Novo card'
     const newNodeId = buildUniqueNodeId(draft.content.nodes, newTitle)
@@ -563,27 +856,32 @@ export function LessonAdmin({
     setStatusMessage('Novo card criado.')
   }
 
-  const handleDuplicateNode = () => {
-    if (!selectedNode) {
+  const handleDuplicateNode = (sourceNodeId = selectedNode?.id ?? null) => {
+    const sourceNode = sourceNodeId
+      ? draft.content.nodes.find((node) => node.id === sourceNodeId)
+      : null
+
+    if (!sourceNode) {
       return
     }
 
     const insertIndex =
-      draft.content.nodes.findIndex((node) => node.id === selectedNode.id) + 1
+      draft.content.nodes.findIndex((node) => node.id === sourceNode.id) + 1
     const duplicatedNodeId = buildUniqueNodeId(
       draft.content.nodes,
-      `${selectedNode.title} copia`,
+            
+`${sourceNode.title} copia`,
     )
-    const sourcePosition = draft.layout.positions[selectedNode.id] ?? {
+    const sourcePosition = draft.layout.positions[sourceNode.id] ?? {
       x: 120,
       y: 520,
     }
     const duplicatedNode = {
-      ...selectedNode,
+      ...sourceNode,
       id: duplicatedNodeId,
-      title: `${selectedNode.title} (Cópia)`,
-      points: [...selectedNode.points],
-      scriptures: [...selectedNode.scriptures],
+      title: `${sourceNode.title} (Copia)`,
+      points: [...sourceNode.points],
+      scriptures: [...sourceNode.scriptures],
     }
 
     updateDraft((currentDraft) => {
@@ -680,6 +978,32 @@ export function LessonAdmin({
     )
   }
 
+  const handleMoveNodeToIndex = (fromIndex, toIndex) => {
+    if (
+      fromIndex === toIndex ||
+      fromIndex < 0 ||
+      toIndex < 0 ||
+      fromIndex >= draft.content.nodes.length ||
+      toIndex >= draft.content.nodes.length
+    ) {
+      return
+    }
+
+    updateDraft((currentDraft) => {
+      const nextNodes = moveItem(currentDraft.content.nodes, fromIndex, toIndex)
+
+      return {
+        content: {
+          ...currentDraft.content,
+          nodes: nextNodes,
+        },
+        layout: syncLayoutWithNodes(nextNodes, currentDraft.layout),
+      }
+    })
+
+    setStatusMessage('Card reposicionado na lista.')
+  }
+
   const handleCopy = async (text, label) => {
     try {
       await navigator.clipboard.writeText(text)
@@ -723,72 +1047,13 @@ export function LessonAdmin({
     <main className="admin-shell">
       <header className="admin-header">
         <div className="admin-header__copy">
-          <button type="button" className="back-link" onClick={onBack}>
-            Voltar para o catálogo
+          <button type="button" className="back-link back-link--eyebrow" onClick={onBack}>
+            <span className="eyebrow">Home</span>
           </button>
-          <span className="eyebrow">Editor visual da aula</span>
           <h1>{draft.content.meta.title}</h1>
-          <p>
-            Ajuste texto, etapas e posições do mapa visualmente. O modo
-            apresentação continua separado e você pode abrir a prévia a qualquer
-            momento.
-          </p>
+          <span className="eyebrow">Editor visual da aula</span>
         </div>
 
-        <div className="admin-header__actions">
-          <button
-            type="button"
-            className="primary-button"
-            onClick={handleSaveDraft}
-          >
-            Salvar rascunho
-          </button>
-          <button
-            type="button"
-            className="toolbar-button"
-            onClick={handleRestoreSavedDraft}
-          >
-            Restaurar último salvo
-          </button>
-          <button
-            type="button"
-            className="toolbar-button"
-            onClick={handleResetDraft}
-          >
-            Voltar ao original
-          </button>
-          <button type="button" className="toolbar-button" onClick={onPreview}>
-            Visualizar aula
-          </button>
-          <button
-            type="button"
-            className="toolbar-button"
-            onClick={() => handleCopy(contentExport, 'Conteúdo')}
-          >
-            Copiar conteúdo
-          </button>
-          <button
-            type="button"
-            className="toolbar-button"
-            onClick={() => handleCopy(layoutExport, 'Layout')}
-          >
-            Copiar layout
-          </button>
-          <button
-            type="button"
-            className="primary-button"
-            onClick={() => handleDownload('mordomiaContent.js', contentExport)}
-          >
-            Baixar conteúdo
-          </button>
-          <button
-            type="button"
-            className="primary-button"
-            onClick={() => handleDownload('mordomiaLayout.js', layoutExport)}
-          >
-            Baixar layout
-          </button>
-        </div>
       </header>
 
       {statusMessage ? <p className="admin-status">{statusMessage}</p> : null}
@@ -797,99 +1062,132 @@ export function LessonAdmin({
         <aside className="admin-sidebar">
           <div className="admin-card">
             <div className="admin-card__header">
-              <strong>Aula</strong>
+              <SectionTitle icon={<BookIcon />} tone="amber">Aula</SectionTitle>
               <span>{lessonEntry.category}</span>
             </div>
 
-            <label className="admin-field">
-              <span>Título</span>
-              <input
-                value={draft.content.meta.title}
-                onChange={(event) => updateMeta('title', event.target.value)}
-              />
-            </label>
+            <FoldSection title="Identidade da aula">
+              <label className="admin-field">
+                <span>Titulo</span>
+                <input
+                  value={draft.content.meta.title}
+                  onChange={(event) => updateMeta('title', event.target.value)}
+                />
+              </label>
 
-            <label className="admin-field">
-              <span>Descrição</span>
-              <textarea
-                rows={4}
-                value={draft.content.meta.description}
-                onChange={(event) => updateMeta('description', event.target.value)}
-              />
-            </label>
+              <label className="admin-field">
+                <span>Descricao</span>
+                <textarea
+                  rows={4}
+                  value={draft.content.meta.description}
+                  onChange={(event) => updateMeta('description', event.target.value)}
+                />
+              </label>
+            </FoldSection>
           </div>
 
           <div className="admin-card">
             <div className="admin-card__header">
-              <strong>Etapas</strong>
+              <SectionTitle icon={<LayersIcon />} tone="blue">Etapas</SectionTitle>
               <span>{draft.content.steps.length}</span>
             </div>
 
             <div className="admin-card__actions">
-              <button
-                type="button"
-                className="toolbar-button"
+              <IconButton
+                label="Subir etapa"
+                variant="info"
                 onClick={() => handleMoveStep(-1)}
                 disabled={selectedStepIndex <= 0}
               >
-                Subir etapa
-              </button>
-              <button
-                type="button"
-                className="toolbar-button"
+                <ArrowUpIcon />
+              </IconButton>
+              <IconButton
+                label="Descer etapa"
+                variant="info"
                 onClick={() => handleMoveStep(1)}
                 disabled={selectedStepIndex >= draft.content.steps.length - 1}
               >
-                Descer etapa
-              </button>
-              <button
-                type="button"
-                className="toolbar-button"
-                onClick={handleCreateStep}
-              >
-                Nova etapa
-              </button>
-              <button
-                type="button"
-                className="toolbar-button"
+                <ArrowDownIcon />
+              </IconButton>
+              <IconButton label="Nova etapa" variant="success" onClick={handleCreateStep}>
+                <PlusIcon />
+              </IconButton>
+              <IconButton
+                label="Duplicar etapa"
+                variant="accent"
                 onClick={handleDuplicateStep}
                 disabled={!selectedStep}
               >
-                Duplicar etapa
-              </button>
-              <button
-                type="button"
-                className="ghost-button admin-danger-button"
+                <CopyIcon />
+              </IconButton>
+              <IconButton
+                label="Excluir etapa"
+                variant="danger"
                 onClick={handleDeleteStep}
                 disabled={!selectedStep}
               >
-                Excluir etapa
-              </button>
+                <TrashIcon />
+              </IconButton>
             </div>
 
+            <label className="admin-field admin-field--compact">
+              <span>Buscar etapa</span>
+              <input
+                value={stepSearch}
+                onChange={(event) => setStepSearch(event.target.value)}
+                placeholder="Titulo, resumo ou foco"
+              />
+            </label>
+
             <div className="admin-step-list">
-              {draft.content.steps.map((step, index) => {
+              {visibleSteps.map(({ step, index }) => {
                 const isCurrent = index === selectedNode?.step
 
                 return (
-                  <button
+                  <div
                     key={step.id}
-                    type="button"
-                    className={`admin-step-item ${isCurrent ? 'admin-step-item--active' : ''}`}
-                    onClick={() => {
-                      const firstNodeInStep = draft.content.nodes.find(
-                        (node) => node.step === index,
-                      )
-
-                      if (firstNodeInStep) {
-                        setSelectedNodeId(firstNodeInStep.id)
+                    className={`admin-list-row ${isCurrent ? 'admin-list-row--active' : ''} ${draggedStepIndex === index ? 'admin-list-row--dragging' : ''}`}
+                    draggable
+                    onDragStart={() => setDraggedStepIndex(index)}
+                    onDragEnd={() => setDraggedStepIndex(null)}
+                    onDragOver={(event) => event.preventDefault()}
+                    onDrop={(event) => {
+                      event.preventDefault()
+                      if (draggedStepIndex !== null) {
+                        handleMoveStepToIndex(draggedStepIndex, index)
                       }
+                      setDraggedStepIndex(null)
                     }}
                   >
-                    <span>{String(index + 1).padStart(2, '0')}</span>
-                    <strong>{step.title}</strong>
-                    <small>{step.summary}</small>
-                  </button>
+                    <button
+                      type="button"
+                      className={`admin-step-item ${isCurrent ? 'admin-step-item--active' : ''}`}
+                      onClick={() => focusStep(index)}
+                    >
+                      <span>{String(index + 1).padStart(2, '0')}</span>
+                      <strong>{step.title}</strong>
+                      <small>{step.summary}</small>
+                    </button>
+
+                    <div className="admin-list-row__actions">
+                      <IconButton
+                        label={`Nova etapa apos ${step.title}`}
+                        variant="success"
+                        className="icon-button--mini"
+                        onClick={() => handleCreateStep(index)}
+                      >
+                        <PlusIcon />
+                      </IconButton>
+                      <IconButton
+                        label={`Duplicar ${step.title}`}
+                        variant="accent"
+                        className="icon-button--mini"
+                        onClick={() => handleDuplicateStep(index)}
+                      >
+                        <CopyIcon />
+                      </IconButton>
+                    </div>
+                  </div>
                 )
               })}
             </div>
@@ -897,50 +1195,137 @@ export function LessonAdmin({
 
           <div className="admin-card">
             <div className="admin-card__header">
-              <strong>Cards</strong>
+              <SectionTitle icon={<CardStackIcon />} tone="green">Cards</SectionTitle>
               <span>{draft.content.nodes.length}</span>
             </div>
 
             <div className="admin-card__actions">
-              <button
-                type="button"
-                className="toolbar-button"
-                onClick={handleCreateNode}
-              >
-                Novo card
-              </button>
-              <button
-                type="button"
-                className="toolbar-button"
+              <IconButton label="Novo card" variant="success" onClick={handleCreateNode}>
+                <PlusIcon />
+              </IconButton>
+              <IconButton
+                label="Duplicar card"
+                variant="accent"
                 onClick={handleDuplicateNode}
                 disabled={!selectedNode}
               >
-                Duplicar
-              </button>
+                <CopyIcon />
+              </IconButton>
             </div>
 
+            <label className="admin-field admin-field--compact">
+              <span>Buscar card</span>
+              <input
+                value={nodeSearch}
+                onChange={(event) => setNodeSearch(event.target.value)}
+                placeholder="Titulo, etapa, topicos ou versiculos"
+              />
+            </label>
+
             <div className="admin-node-list">
-              {draft.content.nodes.map((node, index) => (
-                <button
+              {visibleNodes.map(({ node, index }) => (
+                <div
                   key={node.id}
-                  type="button"
-                  className={`admin-node-item ${node.id === effectiveSelectedNodeId ? 'admin-node-item--active' : ''}`}
-                  onClick={() => setSelectedNodeId(node.id)}
+                  className={`admin-list-row ${node.id === effectiveSelectedNodeId ? 'admin-list-row--active' : ''} ${draggedNodeIndex === index ? 'admin-list-row--dragging' : ''}`}
+                  draggable
+                  onDragStart={() => setDraggedNodeIndex(index)}
+                  onDragEnd={() => setDraggedNodeIndex(null)}
+                  onDragOver={(event) => event.preventDefault()}
+                  onDrop={(event) => {
+                    event.preventDefault()
+                    if (draggedNodeIndex !== null) {
+                      handleMoveNodeToIndex(draggedNodeIndex, index)
+                    }
+                    setDraggedNodeIndex(null)
+                  }}
                 >
-                  <span className={`admin-node-item__tone admin-node-item__tone--${node.tone}`}>
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                  <div>
-                    <strong>{node.title}</strong>
-                    <small>{draft.content.steps[node.step]?.title}</small>
+                  <button
+                    type="button"
+                    className={`admin-node-item ${node.id === effectiveSelectedNodeId ? 'admin-node-item--active' : ''}`}
+                    onClick={() => setSelectedNodeId(node.id)}
+                  >
+                    <span className={`admin-node-item__tone admin-node-item__tone--${node.tone}`}>
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <div>
+                      <strong>{node.title}</strong>
+                      <small>{draft.content.steps[node.step]?.title}</small>
+                    </div>
+                  </button>
+
+                  <div className="admin-list-row__actions">
+                    <IconButton
+                      label={`Novo apos ${node.title}`}
+                      variant="success"
+                      className="icon-button--mini"
+                      onClick={() => handleCreateNode(node.id)}
+                    >
+                      <PlusIcon />
+                    </IconButton>
+                    <IconButton
+                      label={`Duplicar ${node.title}`}
+                      variant="accent"
+                      className="icon-button--mini"
+                      onClick={() => handleDuplicateNode(node.id)}
+                    >
+                      <CopyIcon />
+                    </IconButton>
                   </div>
-                </button>
+                </div>
               ))}
             </div>
           </div>
         </aside>
 
         <section className="admin-canvas-panel">
+          <div className="admin-canvas-toolbar">
+            <ActionGroup label="Projeto">
+              <IconButton label="Salvar rascunho" variant="success" onClick={handleSaveDraft}>
+                <SaveIcon />
+              </IconButton>
+              <IconButton label="Restaurar ultimo salvo" variant="info" onClick={handleRestoreSavedDraft}>
+                <RefreshIcon />
+              </IconButton>
+              <IconButton label="Voltar ao original" variant="warning" onClick={handleResetDraft}>
+                <ResetIcon />
+              </IconButton>
+              <IconButton label="Visualizar aula" variant="info" onClick={onPreview}>
+                <EyeIcon />
+              </IconButton>
+            </ActionGroup>
+
+            <ActionGroup label="Exportacao">
+              <IconButton
+                label="Copiar conteudo"
+                variant="info"
+                onClick={() => handleCopy(contentExport, 'Conteudo')}
+              >
+                <CopyIcon />
+              </IconButton>
+              <IconButton
+                label="Copiar layout"
+                variant="info"
+                onClick={() => handleCopy(layoutExport, 'Layout')}
+              >
+                <CopyIcon />
+              </IconButton>
+              <IconButton
+                label="Baixar conteudo"
+                variant="accent"
+                onClick={() => handleDownload('mordomiaContent.js', contentExport)}
+              >
+                <DownloadIcon />
+              </IconButton>
+              <IconButton
+                label="Baixar layout"
+                variant="accent"
+                onClick={() => handleDownload('mordomiaLayout.js', layoutExport)}
+              >
+                <DownloadIcon />
+              </IconButton>
+            </ActionGroup>
+          </div>
+
           <div className="canvas-frame admin-canvas-frame">
             <ReactFlowProvider>
               <AdminCanvas
@@ -959,257 +1344,251 @@ export function LessonAdmin({
             <>
               <div className="admin-card">
                 <div className="admin-card__header">
-                  <strong>Etapa do card</strong>
+                  <SectionTitle icon={<LayersIcon />} tone="blue">Etapa do card</SectionTitle>
                   <span>{selectedStep.id}</span>
                 </div>
 
                 <div className="admin-card__actions">
-                  <button
-                    type="button"
-                    className="toolbar-button"
+                  <IconButton
+                    label="Subir etapa"
+                    variant="info"
                     onClick={() => handleMoveStep(-1)}
                     disabled={selectedStepIndex <= 0}
                   >
-                    Subir etapa
-                  </button>
-                  <button
-                    type="button"
-                    className="toolbar-button"
+                    <ArrowUpIcon />
+                  </IconButton>
+                  <IconButton
+                    label="Descer etapa"
+                    variant="info"
                     onClick={() => handleMoveStep(1)}
                     disabled={selectedStepIndex >= draft.content.steps.length - 1}
                   >
-                    Descer etapa
-                  </button>
-                  <button
-                    type="button"
-                    className="toolbar-button"
-                    onClick={handleCreateStep}
-                  >
-                    Nova etapa apos esta
-                  </button>
-                  <button
-                    type="button"
-                    className="toolbar-button"
-                    onClick={handleDuplicateStep}
-                  >
-                    Duplicar etapa
-                  </button>
-                  <button
-                    type="button"
-                    className="ghost-button admin-danger-button"
+                    <ArrowDownIcon />
+                  </IconButton>
+                  <IconButton label="Nova etapa apos esta" variant="success" onClick={handleCreateStep}>
+                    <PlusIcon />
+                  </IconButton>
+                  <IconButton label="Duplicar etapa" variant="accent" onClick={handleDuplicateStep}>
+                    <CopyIcon />
+                  </IconButton>
+                  <IconButton
+                    label="Excluir etapa"
+                    variant="danger"
                     onClick={handleDeleteStep}
                   >
-                    Excluir etapa
-                  </button>
+                    <TrashIcon />
+                  </IconButton>
                 </div>
 
-                <label className="admin-field">
-                  <span>Título da etapa</span>
-                  <input
-                    value={selectedStep.title}
-                    onChange={(event) =>
-                      updateStep(selectedNode.step, 'title', event.target.value)
-                    }
-                  />
-                </label>
+                <FoldSection title="Texto da etapa">
+                  <label className="admin-field">
+                    <span>Titulo da etapa</span>
+                    <input
+                      value={selectedStep.title}
+                      onChange={(event) =>
+                        updateStep(selectedNode.step, 'title', event.target.value)
+                      }
+                    />
+                  </label>
 
-                <label className="admin-field">
-                  <span>Resumo da etapa</span>
-                  <textarea
-                    rows={3}
-                    value={selectedStep.summary}
-                    onChange={(event) =>
-                      updateStep(selectedNode.step, 'summary', event.target.value)
-                    }
-                  />
-                </label>
+                  <label className="admin-field">
+                    <span>Resumo da etapa</span>
+                    <textarea
+                      rows={3}
+                      value={selectedStep.summary}
+                      onChange={(event) =>
+                        updateStep(selectedNode.step, 'summary', event.target.value)
+                      }
+                    />
+                  </label>
 
-                <label className="admin-field">
-                  <span>Foco da etapa</span>
-                  <textarea
-                    rows={3}
-                    value={selectedStep.focus}
-                    onChange={(event) =>
-                      updateStep(selectedNode.step, 'focus', event.target.value)
-                    }
-                  />
-                </label>
+                  <label className="admin-field">
+                    <span>Foco da etapa</span>
+                    <textarea
+                      rows={3}
+                      value={selectedStep.focus}
+                      onChange={(event) =>
+                        updateStep(selectedNode.step, 'focus', event.target.value)
+                      }
+                    />
+                  </label>
+                </FoldSection>
               </div>
 
               <div className="admin-card">
                 <div className="admin-card__header">
-                  <strong>Card selecionado</strong>
+                  <SectionTitle icon={<EditIcon />} tone="green">Card selecionado</SectionTitle>
                   <span>{selectedNode.id}</span>
                 </div>
 
                 <div className="admin-card__actions">
-                  <button
-                    type="button"
-                    className="toolbar-button"
+                  <IconButton
+                    label="Subir card"
+                    variant="info"
                     onClick={() => handleMoveNode(-1)}
                     disabled={selectedNodeIndex <= 0}
                   >
-                    Subir card
-                  </button>
-                  <button
-                    type="button"
-                    className="toolbar-button"
+                    <ArrowUpIcon />
+                  </IconButton>
+                  <IconButton
+                    label="Descer card"
+                    variant="info"
                     onClick={() => handleMoveNode(1)}
                     disabled={selectedNodeIndex >= draft.content.nodes.length - 1}
                   >
-                    Descer card
-                  </button>
-                  <button
-                    type="button"
-                    className="toolbar-button"
-                    onClick={handleCreateNode}
-                  >
-                    Novo após este
-                  </button>
-                  <button
-                    type="button"
-                    className="toolbar-button"
-                    onClick={handleDuplicateNode}
-                  >
-                    Duplicar card
-                  </button>
-                  <button
-                    type="button"
-                    className="ghost-button admin-danger-button"
+                    <ArrowDownIcon />
+                  </IconButton>
+                  <IconButton label="Novo apos este" variant="success" onClick={handleCreateNode}>
+                    <PlusIcon />
+                  </IconButton>
+                  <IconButton label="Duplicar card" variant="accent" onClick={handleDuplicateNode}>
+                    <CopyIcon />
+                  </IconButton>
+                  <IconButton
+                    label="Excluir card"
+                    variant="danger"
                     onClick={handleDeleteNode}
                   >
-                    Excluir card
-                  </button>
+                    <TrashIcon />
+                  </IconButton>
                 </div>
 
-                <label className="admin-field">
-                  <span>Título</span>
-                  <input
-                    value={selectedNode.title}
-                    onChange={(event) =>
-                      updateNode(selectedNode.id, 'title', event.target.value)
-                    }
-                  />
-                </label>
-
-                <label className="admin-field">
-                  <span>Resumo</span>
-                  <textarea
-                    rows={4}
-                    value={selectedNode.summary}
-                    onChange={(event) =>
-                      updateNode(selectedNode.id, 'summary', event.target.value)
-                    }
-                  />
-                </label>
-
-                <label className="admin-field">
-                  <span>Etapa</span>
-                  <select
-                    value={selectedNode.step}
-                    onChange={(event) =>
-                      updateNode(selectedNode.id, 'step', Number(event.target.value))
-                    }
-                  >
-                    {draft.content.steps.map((step, index) => (
-                      <option key={step.id} value={index}>
-                        {String(index + 1).padStart(2, '0')} - {step.title}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-
-                <label className="admin-field">
-                  <span>Tonalidade</span>
-                  <select
-                    value={selectedNode.tone}
-                    onChange={(event) =>
-                      updateNode(selectedNode.id, 'tone', event.target.value)
-                    }
-                  >
-                    <option value="sun">Sun</option>
-                    <option value="sky">Sky</option>
-                    <option value="mint">Mint</option>
-                    <option value="rose">Rose</option>
-                  </select>
-                </label>
-
-                <div className="admin-grid">
+                <FoldSection title="Identidade do card">
                   <label className="admin-field">
-                    <span>Posição X</span>
+                    <span>Titulo</span>
                     <input
-                      type="number"
-                      value={draft.layout.positions[selectedNode.id]?.x ?? 0}
+                      value={selectedNode.title}
                       onChange={(event) =>
-                        updateNodePosition(selectedNode.id, {
-                          x: Number(event.target.value),
-                          y: draft.layout.positions[selectedNode.id]?.y ?? 0,
-                        })
+                        updateNode(selectedNode.id, 'title', event.target.value)
                       }
                     />
                   </label>
 
                   <label className="admin-field">
-                    <span>Posição Y</span>
-                    <input
-                      type="number"
-                      value={draft.layout.positions[selectedNode.id]?.y ?? 0}
+                    <span>Resumo</span>
+                    <textarea
+                      rows={4}
+                      value={selectedNode.summary}
                       onChange={(event) =>
-                        updateNodePosition(selectedNode.id, {
-                          x: draft.layout.positions[selectedNode.id]?.x ?? 0,
-                          y: Number(event.target.value),
-                        })
+                        updateNode(selectedNode.id, 'summary', event.target.value)
                       }
                     />
                   </label>
-                </div>
+                </FoldSection>
 
-                <label className="admin-field">
-                  <span>Pontos principais</span>
-                  <textarea
-                    rows={6}
-                    value={selectedNode.points.join('\n')}
-                    onChange={(event) =>
-                      updateNode(
-                        selectedNode.id,
-                        'points',
-                        splitTextareaList(event.target.value),
-                      )
-                    }
-                  />
-                </label>
+                <FoldSection title="Mapa e classificacao">
+                  <label className="admin-field">
+                    <span>Etapa</span>
+                    <select
+                      value={selectedNode.step}
+                      onChange={(event) =>
+                        updateNode(selectedNode.id, 'step', Number(event.target.value))
+                      }
+                    >
+                      {draft.content.steps.map((step, index) => (
+                        <option key={step.id} value={index}>
+                          {String(index + 1).padStart(2, '0')} - {step.title}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
 
-                <label className="admin-field">
-                  <span>Versículos</span>
-                  <textarea
-                    rows={8}
-                    value={selectedNode.scriptures.join('\n')}
-                    onChange={(event) =>
-                      updateNode(
-                        selectedNode.id,
-                        'scriptures',
-                        splitTextareaList(event.target.value),
-                      )
-                    }
-                  />
-                </label>
+                  <label className="admin-field">
+                    <span>Tonalidade</span>
+                    <select
+                      value={selectedNode.tone}
+                      onChange={(event) =>
+                        updateNode(selectedNode.id, 'tone', event.target.value)
+                      }
+                    >
+                      <option value="sun">Sun</option>
+                      <option value="sky">Sky</option>
+                      <option value="mint">Mint</option>
+                      <option value="rose">Rose</option>
+                    </select>
+                  </label>
+
+                  <div className="admin-grid">
+                    <label className="admin-field">
+                      <span>Posicao X</span>
+                      <input
+                        type="number"
+                        value={draft.layout.positions[selectedNode.id]?.x ?? 0}
+                        onChange={(event) =>
+                          updateNodePosition(selectedNode.id, {
+                            x: Number(event.target.value),
+                            y: draft.layout.positions[selectedNode.id]?.y ?? 0,
+                          })
+                        }
+                      />
+                    </label>
+
+                    <label className="admin-field">
+                      <span>Posicao Y</span>
+                      <input
+                        type="number"
+                        value={draft.layout.positions[selectedNode.id]?.y ?? 0}
+                        onChange={(event) =>
+                          updateNodePosition(selectedNode.id, {
+                            x: draft.layout.positions[selectedNode.id]?.x ?? 0,
+                            y: Number(event.target.value),
+                          })
+                        }
+                      />
+                    </label>
+                  </div>
+                </FoldSection>
+
+                <FoldSection title="Conteudo detalhado" defaultOpen={false}>
+                  <label className="admin-field">
+                    <span>Pontos principais</span>
+                    <textarea
+                      rows={6}
+                      value={selectedNode.points.join('\n')}
+                      onChange={(event) =>
+                        updateNode(
+                          selectedNode.id,
+                          'points',
+                          splitTextareaList(event.target.value),
+                        )
+                      }
+                    />
+                  </label>
+
+                  <label className="admin-field">
+                    <span>Versiculos</span>
+                    <textarea
+                      rows={8}
+                      value={selectedNode.scriptures.join('\n')}
+                      onChange={(event) =>
+                        updateNode(
+                          selectedNode.id,
+                          'scriptures',
+                          splitTextareaList(event.target.value),
+                        )
+                      }
+                    />
+                  </label>
+                </FoldSection>
               </div>
 
               <div className="admin-card">
                 <div className="admin-card__header">
-                  <strong>Exportação</strong>
+                  <SectionTitle icon={<ExportIcon />} tone="amber">Exportacao</SectionTitle>
                   <span>Arquivos prontos</span>
                 </div>
 
-                <label className="admin-field">
-                  <span>mordomiaContent.js</span>
-                  <textarea rows={8} readOnly value={contentExport} />
-                </label>
+                <FoldSection title="Arquivos gerados" defaultOpen={false}>
+                  <label className="admin-field">
+                    <span>mordomiaContent.js</span>
+                    <textarea rows={8} readOnly value={contentExport} />
+                  </label>
 
-                <label className="admin-field">
-                  <span>mordomiaLayout.js</span>
-                  <textarea rows={8} readOnly value={layoutExport} />
-                </label>
+                  <label className="admin-field">
+                    <span>mordomiaLayout.js</span>
+                    <textarea rows={8} readOnly value={layoutExport} />
+                  </label>
+                </FoldSection>
               </div>
             </>
           ) : null}
