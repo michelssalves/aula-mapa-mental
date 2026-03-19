@@ -1,3 +1,9 @@
 name = "aula-mapa-mental"
 compatibility_date = "2026-03-18"
 pages_build_output_dir = "dist"
+
+[vars]
+GITHUB_OWNER = "michelssalves"
+GITHUB_REPO = "aula-mapa-mental"
+GITHUB_BRANCH = "master"
+GITHUB_COMMIT_PREFIX = "Atualiza aula"
