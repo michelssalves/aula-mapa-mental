@@ -9,7 +9,7 @@
 } from '@xyflow/react'
 import { useEffect, useMemo, useState } from 'react'
 import { toneEdgeColors } from '../utils/lessonUtils'
-import { loadPublishMeta, savePublishMeta } from '../utils/editorUtils'
+import { createDraft, loadPublishMeta, savePublishMeta } from '../utils/editorUtils'
 import { LessonNode } from './LessonNode'
 
 const nodeTypes = {
@@ -336,6 +336,13 @@ function formatDateTime(value) {
   }).format(date)
 }
 
+function buildDraftSignature(draft) {
+  return JSON.stringify({
+    content: draft.content,
+    layout: draft.layout,
+  })
+}
+
 function serializeModuleExport(exportName, value) {
   return `export const ${exportName} = ${JSON.stringify(value, null, 2)}\n`
 }
@@ -523,6 +530,10 @@ export function LessonAdmin({
     () => serializeModuleExport('mordomiaLayout', draft.layout),
     [draft.layout],
   )
+  const currentDraftSignature = useMemo(() => buildDraftSignature(draft), [draft])
+  const publishedSignature =
+    lastPublishedMeta?.signature ?? buildDraftSignature(createDraft(lessonEntry.source))
+  const hasPendingChanges = currentDraftSignature !== publishedSignature
 
   useEffect(() => {
     setLastPublishedMeta(loadPublishMeta(lessonEntry.id))
@@ -1108,9 +1119,11 @@ export function LessonAdmin({
         branch: result?.branch ?? 'master',
         commitSha: result?.commitSha ?? null,
         commitUrl: result?.commitUrl ?? null,
+        signature: currentDraftSignature,
       }
       savePublishMeta(lessonEntry.id, publishMeta)
       setLastPublishedMeta(publishMeta)
+      setLastDraftSavedAt(null)
       setStatusTone('success')
       setStatusMessage(result?.message ?? 'Alteracoes publicadas com sucesso.')
     } catch (error) {
@@ -1137,11 +1150,24 @@ export function LessonAdmin({
         <div className={`admin-status admin-status--${statusTone}`}>
           <strong>{statusTone === 'success' ? 'Tudo certo' : statusTone === 'danger' ? 'Algo bloqueou a publicacao' : statusTone === 'info' ? 'Publicando' : 'Atencao'}</strong>
           <span>{statusMessage}</span>
+          {statusTone === 'success' && !hasPendingChanges ? (
+            <div className="admin-status__actions">
+              <button type="button" className="admin-status__button" onClick={() => window.location.reload()}>
+                Atualizar agora
+              </button>
+              <button type="button" className="admin-status__button admin-status__button--ghost" onClick={onPreview}>
+                Abrir apresentacao
+              </button>
+            </div>
+          ) : null}
         </div>
       ) : null}
 
       <section className="admin-meta-strip">
         <article className="admin-meta-pill">
+          <span className={`admin-meta-state ${hasPendingChanges ? 'admin-meta-state--warning' : 'admin-meta-state--success'}`}>
+            {hasPendingChanges ? 'Alteracoes pendentes' : 'Publicado'}
+          </span>
           <span>Rascunho local</span>
           <strong>{formatDateTime(lastDraftSavedAt)}</strong>
         </article>

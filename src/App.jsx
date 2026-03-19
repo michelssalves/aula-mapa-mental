@@ -250,6 +250,9 @@ function App() {
             lessonId: activeLessonEntry.id,
             draft: draftToSave,
             files: activeLessonEntry.source.files,
+          }).then((result) => {
+            clearSavedDraft(activeLessonEntry.id)
+            return result
           })
         }
       />

@@ -1416,6 +1416,29 @@
   font-weight: 600;
 }
 
+.admin-status__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.admin-status__button {
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.82);
+  color: currentColor;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px rgba(94, 66, 18, 0.08);
+}
+
+.admin-status__button--ghost {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px currentColor;
+}
+
 .admin-status--info {
   background: rgba(58, 123, 213, 0.1);
   border-color: rgba(58, 123, 213, 0.18);
@@ -1450,6 +1473,29 @@
   box-shadow:
     inset 0 0 0 1px rgba(94, 66, 18, 0.06),
     0 18px 30px rgba(201, 168, 108, 0.12);
+}
+
+.admin-meta-state {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-meta-state--success {
+  background: rgba(20, 159, 106, 0.12);
+  color: #0d6c48;
+}
+
+.admin-meta-state--warning {
+  background: rgba(209, 136, 23, 0.14);
+  color: #8a5b00;
 }
 
 .admin-meta-pill span,
