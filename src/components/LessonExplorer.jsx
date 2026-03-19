@@ -154,6 +154,12 @@ export function LessonExplorer({ lesson, onBack }) {
     setSelectedNodeId(lesson.nodes[nextIndex]?.id ?? null)
   }
 
+  const handleRestart = () => {
+    setActiveNodeIndex(0)
+    setUnlockedNodeIndex(0)
+    setSelectedNodeId(lesson.nodes[0]?.id ?? null)
+  }
+
   const handleTimelineSelect = (nodeIndex) => {
     if (nodeIndex >= 0 && nodeIndex < totalNodes) {
       setActiveNodeIndex(nodeIndex)
@@ -374,6 +380,14 @@ export function LessonExplorer({ lesson, onBack }) {
                 {String(activeNodeIndex + 1).padStart(2, '0')} / {String(totalNodes).padStart(2, '0')}
               </strong>
             </div>
+            <button
+              type="button"
+              className="ghost-button"
+              onClick={handleRestart}
+              disabled={isFirstStep}
+            >
+              Reiniciar
+            </button>
             <button
               type="button"
               className="ghost-button"
