@@ -75,151 +75,123 @@ export const mordomiaLayout = {
   },
   "edges": [
     {
-      "id": "e1",
+      "id": "editor-edge-1",
       "source": "tema",
       "target": "tudo-deus",
       "step": 0,
       "color": "#3a7bd5"
     },
     {
-      "id": "e2",
-      "source": "tema",
+      "id": "editor-edge-2",
+      "source": "tudo-deus",
       "target": "comprados",
       "step": 0,
       "color": "#149f6a"
     },
     {
-      "id": "e3",
-      "source": "tudo-deus",
+      "id": "editor-edge-3",
+      "source": "comprados",
       "target": "mordomo",
       "step": 1,
       "color": "#3a7bd5"
     },
     {
-      "id": "e4",
-      "source": "comprados",
+      "id": "editor-edge-4",
+      "source": "mordomo",
       "target": "significado",
       "step": 1,
       "color": "#149f6a"
     },
     {
-      "id": "e5",
-      "source": "mordomo",
+      "id": "editor-edge-5",
+      "source": "significado",
       "target": "lei-base",
       "step": 2,
       "color": "#d18817"
     },
     {
-      "id": "e6",
-      "source": "significado",
+      "id": "editor-edge-6",
+      "source": "lei-base",
       "target": "para-quem",
       "step": 2,
       "color": "#c45c47"
     },
     {
-      "id": "e7",
-      "source": "lei-base",
+      "id": "editor-edge-7",
+      "source": "para-quem",
       "target": "tipos",
       "step": 3,
       "color": "#d18817"
     },
     {
-      "id": "e8",
-      "source": "para-quem",
-      "target": "tipos",
-      "step": 3,
-      "color": "#c45c47"
-    },
-    {
-      "id": "e9",
+      "id": "editor-edge-8",
       "source": "tipos",
       "target": "levita",
       "step": 3,
       "color": "#3a7bd5"
     },
     {
-      "id": "e10",
-      "source": "tipos",
+      "id": "editor-edge-9",
+      "source": "levita",
       "target": "dizimos-dos-dizimos",
       "step": 3,
       "color": "#149f6a"
     },
     {
-      "id": "e11",
-      "source": "tipos",
+      "id": "editor-edge-10",
+      "source": "dizimos-dos-dizimos",
       "target": "comunhao",
       "step": 3,
       "color": "#d18817"
     },
     {
-      "id": "e12",
-      "source": "tipos",
+      "id": "editor-edge-11",
+      "source": "comunhao",
       "target": "pobres",
       "step": 3,
       "color": "#c45c47"
     },
     {
-      "id": "e13",
-      "source": "levita",
+      "id": "editor-edge-12",
+      "source": "pobres",
       "target": "ofertas",
       "step": 4,
       "color": "#149f6a"
     },
     {
-      "id": "e14",
-      "source": "pobres",
+      "id": "editor-edge-13",
+      "source": "ofertas",
       "target": "quebra",
       "step": 4,
       "color": "#c45c47"
     },
     {
-      "id": "e15",
-      "source": "comunhao",
-      "target": "ofertas",
-      "step": 4,
-      "color": "#d18817"
-    },
-    {
-      "id": "e16",
-      "source": "ofertas",
+      "id": "editor-edge-14",
+      "source": "quebra",
       "target": "novo-testamento",
       "step": 5,
       "color": "#3a7bd5"
     },
     {
-      "id": "e17",
-      "source": "quebra",
+      "id": "editor-edge-15",
+      "source": "novo-testamento",
       "target": "nova-perspectiva",
       "step": 5,
       "color": "#d18817"
     },
     {
-      "id": "e18",
-      "source": "ofertas",
+      "id": "editor-edge-16",
+      "source": "nova-perspectiva",
       "target": "igreja",
       "step": 5,
       "color": "#149f6a"
     },
     {
-      "id": "e19",
-      "source": "novo-testamento",
-      "target": "conclusao",
-      "step": 5,
-      "color": "#3a7bd5"
-    },
-    {
-      "id": "e20",
-      "source": "nova-perspectiva",
-      "target": "conclusao",
-      "step": 5,
-      "color": "#d18817"
-    },
-    {
-      "id": "e21",
+      "id": "editor-edge-17",
       "source": "igreja",
       "target": "conclusao",
       "step": 5,
-      "color": "#149f6a"
+      "color": "#c45c47"
     }
   ]
 }
