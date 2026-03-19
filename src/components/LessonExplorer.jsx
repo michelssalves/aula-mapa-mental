@@ -317,11 +317,7 @@ export function LessonExplorer({ lesson, onBack }) {
                     ))}
                   </ul>
                 </>
-              ) : (
-                <p className="details-panel__empty">
-                  Este card funciona como organizador da narrativa.
-                </p>
-              )}
+              ) : null}
             </>
           ) : null}
         </div>

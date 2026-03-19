@@ -1190,6 +1190,89 @@ export function LessonAdmin({
 
           <div className="admin-card">
             <div className="admin-card__header">
+              <SectionTitle icon={<CardStackIcon />} tone="green">Cards</SectionTitle>
+              <span>{draft.content.nodes.length}</span>
+            </div>
+
+            <div className="admin-card__actions">
+              <IconButton label="Novo card" variant="success" onClick={handleCreateNode}>
+                <PlusIcon />
+              </IconButton>
+              <IconButton
+                label="Duplicar card"
+                variant="accent"
+                onClick={handleDuplicateNode}
+                disabled={!selectedNode}
+              >
+                <CopyIcon />
+              </IconButton>
+            </div>
+
+            <label className="admin-field admin-field--compact">
+              <span>Buscar card</span>
+              <input
+                value={nodeSearch}
+                onChange={(event) => setNodeSearch(event.target.value)}
+                placeholder="Titulo, etapa, topicos ou versiculos"
+              />
+            </label>
+
+            <div className="admin-node-list">
+              {visibleNodes.map(({ node, index }) => (
+                <div
+                  key={node.id}
+                  className={`admin-list-row ${node.id === effectiveSelectedNodeId ? 'admin-list-row--active' : ''} ${draggedNodeIndex === index ? 'admin-list-row--dragging' : ''}`}
+                  draggable
+                  onDragStart={() => setDraggedNodeIndex(index)}
+                  onDragEnd={() => setDraggedNodeIndex(null)}
+                  onDragOver={(event) => event.preventDefault()}
+                  onDrop={(event) => {
+                    event.preventDefault()
+                    if (draggedNodeIndex !== null) {
+                      handleMoveNodeToIndex(draggedNodeIndex, index)
+                    }
+                    setDraggedNodeIndex(null)
+                  }}
+                >
+                  <button
+                    type="button"
+                    className={`admin-node-item ${node.id === effectiveSelectedNodeId ? 'admin-node-item--active' : ''}`}
+                    onClick={() => setSelectedNodeId(node.id)}
+                  >
+                    <span className={`admin-node-item__tone admin-node-item__tone--${node.tone}`}>
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <div>
+                      <strong>{node.title}</strong>
+                      <small>{draft.content.steps[node.step]?.title}</small>
+                    </div>
+                  </button>
+
+                  <div className="admin-list-row__actions">
+                    <IconButton
+                      label={`Novo apos ${node.title}`}
+                      variant="success"
+                      className="icon-button--mini"
+                      onClick={() => handleCreateNode(node.id)}
+                    >
+                      <PlusIcon />
+                    </IconButton>
+                    <IconButton
+                      label={`Duplicar ${node.title}`}
+                      variant="accent"
+                      className="icon-button--mini"
+                      onClick={() => handleDuplicateNode(node.id)}
+                    >
+                      <CopyIcon />
+                    </IconButton>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="admin-card">
+            <div className="admin-card__header">
               <SectionTitle icon={<LayersIcon />} tone="blue">Etapas</SectionTitle>
               <span>{draft.content.steps.length}</span>
             </div>
@@ -1292,89 +1375,6 @@ export function LessonAdmin({
                   </div>
                 )
               })}
-            </div>
-          </div>
-
-          <div className="admin-card">
-            <div className="admin-card__header">
-              <SectionTitle icon={<CardStackIcon />} tone="green">Cards</SectionTitle>
-              <span>{draft.content.nodes.length}</span>
-            </div>
-
-            <div className="admin-card__actions">
-              <IconButton label="Novo card" variant="success" onClick={handleCreateNode}>
-                <PlusIcon />
-              </IconButton>
-              <IconButton
-                label="Duplicar card"
-                variant="accent"
-                onClick={handleDuplicateNode}
-                disabled={!selectedNode}
-              >
-                <CopyIcon />
-              </IconButton>
-            </div>
-
-            <label className="admin-field admin-field--compact">
-              <span>Buscar card</span>
-              <input
-                value={nodeSearch}
-                onChange={(event) => setNodeSearch(event.target.value)}
-                placeholder="Titulo, etapa, topicos ou versiculos"
-              />
-            </label>
-
-            <div className="admin-node-list">
-              {visibleNodes.map(({ node, index }) => (
-                <div
-                  key={node.id}
-                  className={`admin-list-row ${node.id === effectiveSelectedNodeId ? 'admin-list-row--active' : ''} ${draggedNodeIndex === index ? 'admin-list-row--dragging' : ''}`}
-                  draggable
-                  onDragStart={() => setDraggedNodeIndex(index)}
-                  onDragEnd={() => setDraggedNodeIndex(null)}
-                  onDragOver={(event) => event.preventDefault()}
-                  onDrop={(event) => {
-                    event.preventDefault()
-                    if (draggedNodeIndex !== null) {
-                      handleMoveNodeToIndex(draggedNodeIndex, index)
-                    }
-                    setDraggedNodeIndex(null)
-                  }}
-                >
-                  <button
-                    type="button"
-                    className={`admin-node-item ${node.id === effectiveSelectedNodeId ? 'admin-node-item--active' : ''}`}
-                    onClick={() => setSelectedNodeId(node.id)}
-                  >
-                    <span className={`admin-node-item__tone admin-node-item__tone--${node.tone}`}>
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                    <div>
-                      <strong>{node.title}</strong>
-                      <small>{draft.content.steps[node.step]?.title}</small>
-                    </div>
-                  </button>
-
-                  <div className="admin-list-row__actions">
-                    <IconButton
-                      label={`Novo apos ${node.title}`}
-                      variant="success"
-                      className="icon-button--mini"
-                      onClick={() => handleCreateNode(node.id)}
-                    >
-                      <PlusIcon />
-                    </IconButton>
-                    <IconButton
-                      label={`Duplicar ${node.title}`}
-                      variant="accent"
-                      className="icon-button--mini"
-                      onClick={() => handleDuplicateNode(node.id)}
-                    >
-                      <CopyIcon />
-                    </IconButton>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         </aside>
