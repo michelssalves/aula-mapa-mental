@@ -659,7 +659,9 @@
 }
 
 .back-link--eyebrow {
-  margin-bottom: 8px;
+  margin-bottom: 0;
+  display: inline-flex;
+  align-items: center;
 }
 
 .back-link--eyebrow:hover {
@@ -1280,6 +1282,12 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
+}
+
+.admin-header__eyebrows .eyebrow {
+  margin-bottom: 0;
+  min-height: 36px;
+  align-items: center;
 }
 
 .admin-header__headline {

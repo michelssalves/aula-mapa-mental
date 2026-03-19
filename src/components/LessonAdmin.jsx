@@ -1451,79 +1451,6 @@ export function LessonAdmin({
             <>
               <div className="admin-card">
                 <div className="admin-card__header">
-                  <SectionTitle icon={<LayersIcon />} tone="blue">Etapa do card</SectionTitle>
-                  <span>{selectedStep.id}</span>
-                </div>
-
-                <div className="admin-card__actions">
-                  <IconButton
-                    label="Subir etapa"
-                    variant="info"
-                    onClick={() => handleMoveStep(-1)}
-                    disabled={selectedStepIndex <= 0}
-                  >
-                    <ArrowUpIcon />
-                  </IconButton>
-                  <IconButton
-                    label="Descer etapa"
-                    variant="info"
-                    onClick={() => handleMoveStep(1)}
-                    disabled={selectedStepIndex >= draft.content.steps.length - 1}
-                  >
-                    <ArrowDownIcon />
-                  </IconButton>
-                  <IconButton label="Nova etapa apos esta" variant="success" onClick={handleCreateStep}>
-                    <PlusIcon />
-                  </IconButton>
-                  <IconButton label="Duplicar etapa" variant="accent" onClick={handleDuplicateStep}>
-                    <CopyIcon />
-                  </IconButton>
-                  <IconButton
-                    label="Excluir etapa"
-                    variant="danger"
-                    onClick={handleDeleteStep}
-                  >
-                    <TrashIcon />
-                  </IconButton>
-                </div>
-
-                <FoldSection title="Texto da etapa">
-                  <label className="admin-field">
-                    <span>Titulo da etapa</span>
-                    <input
-                      value={selectedStep.title}
-                      onChange={(event) =>
-                        updateStep(selectedNode.step, 'title', event.target.value)
-                      }
-                    />
-                  </label>
-
-                  <label className="admin-field">
-                    <span>Resumo da etapa</span>
-                    <textarea
-                      rows={3}
-                      value={selectedStep.summary}
-                      onChange={(event) =>
-                        updateStep(selectedNode.step, 'summary', event.target.value)
-                      }
-                    />
-                  </label>
-
-                  <label className="admin-field">
-                    <span>Foco da etapa</span>
-                    <textarea
-                      rows={3}
-                      value={selectedStep.focus}
-                      onChange={(event) =>
-                        updateStep(selectedNode.step, 'focus', event.target.value)
-                      }
-                    />
-                  </label>
-                </FoldSection>
-              </div>
-
-              <div className="admin-card">
-                <div className="admin-card__header">
                   <SectionTitle icon={<EditIcon />} tone="green">Card selecionado</SectionTitle>
                   <span>{selectedNode.id}</span>
                 </div>
@@ -1673,6 +1600,79 @@ export function LessonAdmin({
                           'scriptures',
                           splitTextareaList(event.target.value),
                         )
+                      }
+                    />
+                  </label>
+                </FoldSection>
+              </div>
+
+              <div className="admin-card">
+                <div className="admin-card__header">
+                  <SectionTitle icon={<LayersIcon />} tone="blue">Etapa do card</SectionTitle>
+                  <span>{selectedStep.id}</span>
+                </div>
+
+                <div className="admin-card__actions">
+                  <IconButton
+                    label="Subir etapa"
+                    variant="info"
+                    onClick={() => handleMoveStep(-1)}
+                    disabled={selectedStepIndex <= 0}
+                  >
+                    <ArrowUpIcon />
+                  </IconButton>
+                  <IconButton
+                    label="Descer etapa"
+                    variant="info"
+                    onClick={() => handleMoveStep(1)}
+                    disabled={selectedStepIndex >= draft.content.steps.length - 1}
+                  >
+                    <ArrowDownIcon />
+                  </IconButton>
+                  <IconButton label="Nova etapa apos esta" variant="success" onClick={handleCreateStep}>
+                    <PlusIcon />
+                  </IconButton>
+                  <IconButton label="Duplicar etapa" variant="accent" onClick={handleDuplicateStep}>
+                    <CopyIcon />
+                  </IconButton>
+                  <IconButton
+                    label="Excluir etapa"
+                    variant="danger"
+                    onClick={handleDeleteStep}
+                  >
+                    <TrashIcon />
+                  </IconButton>
+                </div>
+
+                <FoldSection title="Texto da etapa">
+                  <label className="admin-field">
+                    <span>Titulo da etapa</span>
+                    <input
+                      value={selectedStep.title}
+                      onChange={(event) =>
+                        updateStep(selectedNode.step, 'title', event.target.value)
+                      }
+                    />
+                  </label>
+
+                  <label className="admin-field">
+                    <span>Resumo da etapa</span>
+                    <textarea
+                      rows={3}
+                      value={selectedStep.summary}
+                      onChange={(event) =>
+                        updateStep(selectedNode.step, 'summary', event.target.value)
+                      }
+                    />
+                  </label>
+
+                  <label className="admin-field">
+                    <span>Foco da etapa</span>
+                    <textarea
+                      rows={3}
+                      value={selectedStep.focus}
+                      onChange={(event) =>
+                        updateStep(selectedNode.step, 'focus', event.target.value)
                       }
                     />
                   </label>
