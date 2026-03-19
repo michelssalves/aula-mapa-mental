@@ -147,16 +147,6 @@ function DownloadIcon() {
   )
 }
 
-function CloudUploadIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
-      <path d="M7 18a4 4 0 1 1 .7-7.94A5.5 5.5 0 0 1 18 11a3.5 3.5 0 1 1-.5 7H7Z" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M12 10v7" strokeLinecap="round" />
-      <path d="m9 13 3-3 3 3" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
 function BookIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
@@ -408,8 +398,6 @@ export function LessonAdmin({
   draft,
   onDraftChange,
   onBack,
-  onPreview,
-  onSaveDraft,
   onRestoreSavedDraft,
   onResetDraft,
   onSaveToRepo,
@@ -424,7 +412,6 @@ export function LessonAdmin({
   const [stepSearch, setStepSearch] = useState('')
   const [nodeSearch, setNodeSearch] = useState('')
   const [isSavingToRepo, setIsSavingToRepo] = useState(false)
-  const [lastDraftSavedAt, setLastDraftSavedAt] = useState(null)
   const [lastPublishedMeta, setLastPublishedMeta] = useState(() =>
     loadPublishMeta(lessonEntry.id),
   )
@@ -534,6 +521,7 @@ export function LessonAdmin({
   const publishedSignature =
     lastPublishedMeta?.signature ?? buildDraftSignature(createDraft(lessonEntry.source))
   const hasPendingChanges = currentDraftSignature !== publishedSignature
+  const previewHref = `${window.location.origin}${window.location.pathname}#/aula/${lessonEntry.id}`
 
   useEffect(() => {
     setLastPublishedMeta(loadPublishMeta(lessonEntry.id))
@@ -1077,14 +1065,6 @@ export function LessonAdmin({
     setStatusMessage(`${filename} baixado.`)
   }
 
-  const handleSaveDraft = () => {
-    onSaveDraft(draft)
-    const savedAt = new Date().toISOString()
-    setLastDraftSavedAt(savedAt)
-    setStatusTone('success')
-    setStatusMessage('Rascunho salvo neste navegador.')
-  }
-
   const handleRestoreSavedDraft = () => {
     const restored = onRestoreSavedDraft()
     setStatusTone(restored ? 'success' : 'warning')
@@ -1097,7 +1077,6 @@ export function LessonAdmin({
 
   const handleResetDraft = () => {
     onResetDraft()
-    setLastDraftSavedAt(null)
     setStatusTone('warning')
     setStatusMessage('Editor restaurado para a versao original da aula.')
   }
@@ -1124,7 +1103,6 @@ export function LessonAdmin({
       }
       savePublishMeta(lessonEntry.id, publishMeta)
       setLastPublishedMeta(publishMeta)
-      setLastDraftSavedAt(null)
       setStatusTone('success')
       setStatusMessage(result?.message ?? 'Alteracoes publicadas com sucesso.')
     } catch (error) {
@@ -1134,6 +1112,11 @@ export function LessonAdmin({
       setIsSavingToRepo(false)
     }
   }
+
+  const handleOpenPreviewInNewTab = () => {
+    window.open(previewHref, '_blank', 'noopener,noreferrer')
+  }
+
   return (
     <main className="admin-shell">
       <header className="admin-header">
@@ -1149,11 +1132,6 @@ export function LessonAdmin({
             <div className="admin-header__meta-inline">
               <span className={`admin-meta-state ${hasPendingChanges ? 'admin-meta-state--warning' : 'admin-meta-state--success'}`}>
                 {hasPendingChanges ? 'Alteracoes pendentes' : 'Publicado'}
-              </span>
-              <span className="admin-header__meta-chip">
-                {lastDraftSavedAt
-                  ? `Rascunho ${formatDateTime(lastDraftSavedAt)}`
-                  : 'Sem rascunho local'}
               </span>
               <span className="admin-header__meta-chip admin-header__meta-chip--publish">
                 {lastPublishedMeta?.savedAt
@@ -1174,7 +1152,7 @@ export function LessonAdmin({
               <button type="button" className="admin-status__button" onClick={() => window.location.reload()}>
                 Atualizar agora
               </button>
-              <button type="button" className="admin-status__button admin-status__button--ghost" onClick={onPreview}>
+              <button type="button" className="admin-status__button admin-status__button--ghost" onClick={handleOpenPreviewInNewTab}>
                 Abrir apresentacao
               </button>
             </div>
@@ -1403,17 +1381,14 @@ export function LessonAdmin({
 
         <section className="admin-canvas-panel">
           <div className="admin-canvas-toolbar">
-            <ActionGroup label="Salvar e publicar">
-              <IconButton label="Salvar rascunho" variant="success" onClick={handleSaveDraft}>
-                <SaveIcon />
-              </IconButton>
+            <ActionGroup label="Publicacao">
               <IconButton
                 label="Publicar no site"
                 variant="accent"
                 onClick={handleSaveToRepo}
                 disabled={isSavingToRepo}
               >
-                <CloudUploadIcon />
+                <SaveIcon />
               </IconButton>
               <IconButton label="Restaurar ultimo salvo" variant="info" onClick={handleRestoreSavedDraft}>
                 <RefreshIcon />
@@ -1421,7 +1396,7 @@ export function LessonAdmin({
               <IconButton label="Voltar ao original" variant="warning" onClick={handleResetDraft}>
                 <ResetIcon />
               </IconButton>
-              <IconButton label="Abrir apresentacao" variant="info" onClick={onPreview}>
+              <IconButton label="Abrir apresentacao em nova guia" variant="info" onClick={handleOpenPreviewInNewTab}>
                 <EyeIcon />
               </IconButton>
             </ActionGroup>
