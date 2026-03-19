@@ -7,3 +7,9 @@ GITHUB_OWNER = "michelssalves"
 GITHUB_REPO = "aula-mapa-mental"
 GITHUB_BRANCH = "master"
 GITHUB_COMMIT_PREFIX = "Atualiza aula"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "aula-mapa-mental"
+database_id = "80d3d9c9-5fce-4030-84b6-8bedab277f7e"
+preview_database_id = "80d3d9c9-5fce-4030-84b6-8bedab277f7e"

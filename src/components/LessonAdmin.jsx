@@ -1105,20 +1105,21 @@ export function LessonAdmin({
   const handleSaveToRepo = async () => {
     if (!onSaveToRepo) {
       setStatusTone('warning')
-      setStatusMessage('Salvamento remoto nao configurado para esta aula.')
+      setStatusMessage('Publicacao remota nao configurada para esta aula.')
       return
     }
 
     try {
       setIsSavingToRepo(true)
       setStatusTone('info')
-      setStatusMessage('Publicando alteracoes no repositorio...')
+      setStatusMessage('Publicando alteracoes ao vivo...')
       const result = await onSaveToRepo(draft)
       const publishMeta = {
         savedAt: result?.savedAt ?? new Date().toISOString(),
         branch: result?.branch ?? 'master',
         commitSha: result?.commitSha ?? null,
         commitUrl: result?.commitUrl ?? null,
+        source: result?.source ?? 'd1',
         signature: currentDraftSignature,
       }
       savePublishMeta(lessonEntry.id, publishMeta)
@@ -1177,6 +1178,8 @@ export function LessonAdmin({
           <small>
             {lastPublishedMeta?.commitSha
               ? `Commit ${lastPublishedMeta.commitSha.slice(0, 7)} em ${lastPublishedMeta?.branch ?? 'master'}`
+              : lastPublishedMeta?.savedAt
+                ? 'Versao ao vivo gravada no D1'
               : 'Ainda nao publicada pelo editor'}
           </small>
           {lastPublishedMeta?.commitUrl ? (

@@ -63,28 +63,20 @@ No editor visual você consegue:
 - arrastar cards no mapa para ajustar a posição visual
 - exportar `mordomiaContent.js` e `mordomiaLayout.js`
 
-## Salvar no repositorio com Cloudflare
+## Publicacao em tempo real com Cloudflare D1
 
-O projeto tambem esta preparado para usar `Cloudflare Pages Functions` e salvar a aula direto no repositorio GitHub.
+O projeto agora pode publicar as aulas em tempo real usando `Cloudflare Pages Functions + D1`.
 
 Arquivos principais dessa integracao:
 
-- `functions/api/save-lesson.js`
-  endpoint serverless que grava `content` e `layout` via GitHub API
-- `src/utils/cloudSave.js`
-  chamada do frontend para `/api/save-lesson`
+- `functions/api/lesson.js`
+  endpoint serverless que le e grava `content` e `layout` no D1
+- `src/utils/liveLesson.js`
+  chamadas do frontend para carregar e publicar aulas em tempo real
+- `migrations/0001_create_lessons.sql`
+  schema inicial da tabela de aulas
 - `wrangler.toml`
-  configuracao base do projeto para Cloudflare
-- `.dev.vars.example`
-  exemplo das variaveis necessarias
-
-Variaveis de ambiente necessarias:
-
-- `GITHUB_TOKEN`
-- `GITHUB_OWNER`
-- `GITHUB_REPO`
-- `GITHUB_BRANCH`
-- `GITHUB_COMMIT_PREFIX`
+  configuracao base do projeto para Cloudflare e referencia do binding D1
 
 Rodando localmente com Cloudflare:
 
@@ -94,11 +86,33 @@ npm.cmd run build
 npm.cmd run cf:dev
 ```
 
-No editor, use o botao de nuvem para `Salvar no repositorio`.
+### Criar o banco D1
 
-Para deploy no Cloudflare Pages:
+1. Crie um banco D1 no Cloudflare, por exemplo `aula-mapa-mental`.
+2. Aplique a migration:
+
+```bash
+npx wrangler d1 execute aula-mapa-mental --file=./migrations/0001_create_lessons.sql
+```
+
+3. No Cloudflare Pages, adicione um binding D1 com:
+- nome: `DB`
+- banco: `aula-mapa-mental`
+
+Se quiser usar o binding localmente, preencha o bloco comentado em `wrangler.toml`.
+
+No editor, use o botao de nuvem para `Publicar no site`.
+
+A apresentacao passa a ler a aula publicada do D1 quando ela existir. Se ainda nao houver registro no D1, o app usa os arquivos locais como fallback.
+
+## Backup opcional no GitHub
+
+O endpoint `functions/api/save-lesson.js` continua no projeto como base para backup/versionamento no GitHub, se voce quiser manter esse fluxo depois.
+
+## Deploy no Cloudflare Pages
 
 1. conecte o repositorio no Cloudflare Pages
 2. use `npm run build` como build command
 3. use `dist` como output directory
-4. cadastre as variaveis do GitHub no painel do Cloudflare
+4. configure o binding D1 `DB`
+5. se quiser backup GitHub, mantenha tambem as variaveis do GitHub no painel do Cloudflare

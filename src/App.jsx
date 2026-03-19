@@ -5,13 +5,13 @@ import { buildLessonBlueprint } from './data/buildLessonBlueprint'
 import { lessonsCatalog } from './data/lessonsCatalog'
 import { LessonAdmin } from './components/LessonAdmin'
 import { LessonExplorer } from './components/LessonExplorer'
-import { saveLessonToRepository } from './utils/cloudSave'
 import {
   clearSavedDraft,
   createDraft,
   loadSavedDraft,
   saveDraftToStorage,
 } from './utils/editorUtils'
+import { loadLessonFromCloud, publishLessonToCloud } from './utils/liveLesson'
 
 function parseHashRoute(hashValue) {
   const normalizedHash = hashValue.replace(/^#/, '')
@@ -190,24 +190,38 @@ function CatalogHome({ lessons, onOpenLesson, onOpenAdmin }) {
 function App() {
   const [route, setRoute] = useState(() => parseHashRoute(window.location.hash))
   const [lessonDrafts, setLessonDrafts] = useState({})
+  const [publishedLessons, setPublishedLessons] = useState({})
   const screen = route.screen
   const activeLessonId = route.lessonId
 
   const activeLessonEntry =
     lessonsCatalog.find((lesson) => lesson.id === activeLessonId) ?? null
 
+  const activePublishedLesson =
+    activeLessonEntry ? publishedLessons[activeLessonEntry.id] ?? null : null
+
+  const activeLessonSource =
+    activeLessonEntry && activePublishedLesson
+      ? {
+          content: activePublishedLesson.content,
+          layout: activePublishedLesson.layout,
+        }
+      : activeLessonEntry?.source ?? null
+
   const activeLessonDraft =
-    activeLessonEntry
+    activeLessonSource
       ? lessonDrafts[activeLessonEntry.id] ??
         (screen === 'editor'
-          ? loadSavedDraft(activeLessonEntry.id) ?? createDraft(activeLessonEntry.source)
+          ? loadSavedDraft(activeLessonEntry.id) ?? createDraft(activeLessonSource)
           : null)
       : null
 
   const activeLessonBlueprint =
-    activeLessonEntry && activeLessonDraft
+    activeLessonSource && activeLessonDraft
       ? buildLessonBlueprint(activeLessonDraft.content, activeLessonDraft.layout)
-      : activeLessonEntry?.blueprint ?? null
+      : activeLessonSource
+        ? buildLessonBlueprint(activeLessonSource.content, activeLessonSource.layout)
+        : null
 
   useEffect(() => {
     const syncRoute = () => {
@@ -223,6 +237,33 @@ function App() {
 
     return () => window.removeEventListener('hashchange', syncRoute)
   }, [])
+
+  useEffect(() => {
+    if (!activeLessonEntry) {
+      return undefined
+    }
+
+    let isActive = true
+
+    loadLessonFromCloud(activeLessonEntry.id)
+      .then((lessonData) => {
+        if (!isActive || !lessonData) {
+          return
+        }
+
+        setPublishedLessons((currentLessons) => ({
+          ...currentLessons,
+          [activeLessonEntry.id]: lessonData,
+        }))
+      })
+      .catch(() => {
+        // Mantem fallback para os arquivos locais quando nao houver aula publicada no D1.
+      })
+
+    return () => {
+      isActive = false
+    }
+  }, [activeLessonEntry])
 
   const navigateTo = (nextScreen, lessonId = null) => {
     window.location.hash = buildHashRoute(nextScreen, lessonId)
@@ -290,12 +331,20 @@ function App() {
           }))
         }}
         onSaveToRepo={(draftToSave) =>
-          saveLessonToRepository({
+          publishLessonToCloud({
             lessonId: activeLessonEntry.id,
             draft: draftToSave,
-            files: activeLessonEntry.source.files,
           }).then((result) => {
             clearSavedDraft(activeLessonEntry.id)
+            setPublishedLessons((currentLessons) => ({
+              ...currentLessons,
+              [activeLessonEntry.id]: {
+                content: draftToSave.content,
+                layout: draftToSave.layout,
+                savedAt: result?.savedAt ?? new Date().toISOString(),
+                source: result?.source ?? 'd1',
+              },
+            }))
             return result
           })
         }
