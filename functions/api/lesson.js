@@ -29,6 +29,30 @@ export async function onRequestGet(context) {
     const db = ensureDatabase(context.env)
     const url = new URL(context.request.url)
     const lessonId = url.searchParams.get('lessonId')
+    const mode = url.searchParams.get('mode')
+
+    if (mode === 'list') {
+      const { results } = await db
+        .prepare(
+          `
+          SELECT id, content_json, layout_json, updated_at
+          FROM lessons
+          ORDER BY updated_at DESC
+          `,
+        )
+        .all()
+
+      return jsonResponse({
+        ok: true,
+        lessons: (results ?? []).map((row) => ({
+          lessonId: row.id,
+          content: JSON.parse(row.content_json),
+          layout: JSON.parse(row.layout_json),
+          savedAt: row.updated_at,
+          source: 'd1',
+        })),
+      })
+    }
 
     if (!lessonId) {
       return jsonResponse({ error: 'lessonId e obrigatorio.' }, 400)

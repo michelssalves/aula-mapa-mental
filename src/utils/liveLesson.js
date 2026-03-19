@@ -18,6 +18,23 @@ export async function loadLessonFromCloud(lessonId) {
   }
 }
 
+export async function loadLessonsFromCloud() {
+  const response = await fetch('/api/lesson?mode=list')
+  const data = await response.json().catch(() => ({}))
+
+  if (!response.ok) {
+    throw new Error(data.error ?? 'Nao foi possivel carregar a lista de aulas.')
+  }
+
+  return (data.lessons ?? []).map((lesson) => ({
+    lessonId: lesson.lessonId,
+    content: lesson.content,
+    layout: lesson.layout,
+    savedAt: lesson.savedAt ?? null,
+    source: lesson.source ?? 'd1',
+  }))
+}
+
 export async function publishLessonToCloud({ lessonId, draft }) {
   const response = await fetch('/api/lesson', {
     method: 'POST',

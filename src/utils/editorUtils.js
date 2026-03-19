@@ -8,6 +8,65 @@ export function createDraft(source) {
   }
 }
 
+export function createEmptyLessonSource(overrides = {}) {
+  const title = overrides.title ?? 'Nova aula'
+  const description =
+    overrides.description ?? 'Descreva aqui o objetivo principal da aula.'
+
+  return {
+    content: {
+      meta: {
+        title,
+        description,
+        category: overrides.category ?? 'Estudo biblico',
+        audience: overrides.audience ?? 'A definir',
+        duration: overrides.duration ?? '1 etapa',
+        accent: overrides.accent ?? 'amber',
+      },
+      steps: [
+        {
+          id: 'step-1',
+          title: 'Primeira etapa',
+          summary: 'Resumo inicial da etapa.',
+          focus: 'Defina aqui o foco principal desta etapa.',
+        },
+      ],
+      nodes: [
+        {
+          id: 'card-1',
+          step: 0,
+          title: 'Primeiro card',
+          summary: 'Resumo inicial do card.',
+          points: ['Primeiro ponto principal'],
+          scriptures: [],
+          tone: 'sun',
+          imageUrl: '',
+        },
+      ],
+    },
+    layout: {
+      positions: {
+        'card-1': {
+          x: 120,
+          y: 520,
+        },
+      },
+      edges: [],
+    },
+  }
+}
+
+export function slugifyLessonId(value) {
+  const normalized = String(value ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+
+  return normalized || 'nova-aula'
+}
+
 function getDraftStorageKey(lessonId) {
   return `${draftStoragePrefix}${lessonId}`
 }
