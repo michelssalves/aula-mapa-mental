@@ -25,14 +25,21 @@ function toBase64(value) {
   return btoa(binary)
 }
 
+function githubHeaders(token, extraHeaders = {}) {
+  return {
+    Authorization: `Bearer ${token}`,
+    Accept: 'application/vnd.github+json',
+    'User-Agent': 'aula-mapa-mental-cloudflare',
+    'X-GitHub-Api-Version': '2022-11-28',
+    ...extraHeaders,
+  }
+}
+
 async function readCurrentSha({ owner, repo, branch, path, token }) {
   const response = await fetch(
     `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`,
     {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/vnd.github+json',
-      },
+      headers: githubHeaders(token),
     },
   )
 
@@ -63,11 +70,9 @@ async function updateRepositoryFile({
     `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
     {
       method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/vnd.github+json',
+      headers: githubHeaders(token, {
         'Content-Type': 'application/json',
-      },
+      }),
       body: JSON.stringify({
         message: commitMessage,
         content: toBase64(content),
