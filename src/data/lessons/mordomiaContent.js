@@ -46,7 +46,7 @@ export const mordomiaContent = {
       "id": "tema",
       "step": 0,
       "title": "Mordomia, Dízimo e Contribuição",
-      "summary": "Panorama da aula.",
+      "summary": "Panorama da aulaaaaaaaa.",
       "points": [
         "Tudo pertence a Deus",
         "O homem é mordomo",
