@@ -1,4 +1,4 @@
-import {
+﻿import {
   applyNodeChanges,
   Background,
   Controls,
@@ -9,6 +9,7 @@ import {
 } from '@xyflow/react'
 import { useEffect, useMemo, useState } from 'react'
 import { toneEdgeColors } from '../utils/lessonUtils'
+import { loadPublishMeta, savePublishMeta } from '../utils/editorUtils'
 import { LessonNode } from './LessonNode'
 
 const nodeTypes = {
@@ -318,6 +319,23 @@ function splitTextareaList(value) {
     .filter(Boolean)
 }
 
+function formatDateTime(value) {
+  if (!value) {
+    return 'Ainda nao registrado'
+  }
+
+  const date = new Date(value)
+
+  if (Number.isNaN(date.getTime())) {
+    return 'Ainda nao registrado'
+  }
+
+  return new Intl.DateTimeFormat('pt-BR', {
+    dateStyle: 'short',
+    timeStyle: 'short',
+  }).format(date)
+}
+
 function serializeModuleExport(exportName, value) {
   return `export const ${exportName} = ${JSON.stringify(value, null, 2)}\n`
 }
@@ -393,11 +411,16 @@ export function LessonAdmin({
     draft.content.nodes[0]?.id ?? null,
   )
   const [statusMessage, setStatusMessage] = useState('')
+  const [statusTone, setStatusTone] = useState('success')
   const [draggedStepIndex, setDraggedStepIndex] = useState(null)
   const [draggedNodeIndex, setDraggedNodeIndex] = useState(null)
   const [stepSearch, setStepSearch] = useState('')
   const [nodeSearch, setNodeSearch] = useState('')
   const [isSavingToRepo, setIsSavingToRepo] = useState(false)
+  const [lastDraftSavedAt, setLastDraftSavedAt] = useState(null)
+  const [lastPublishedMeta, setLastPublishedMeta] = useState(() =>
+    loadPublishMeta(lessonEntry.id),
+  )
   const effectiveSelectedNodeId = draft.content.nodes.some(
     (node) => node.id === selectedNodeId,
   )
@@ -500,6 +523,10 @@ export function LessonAdmin({
     () => serializeModuleExport('mordomiaLayout', draft.layout),
     [draft.layout],
   )
+
+  useEffect(() => {
+    setLastPublishedMeta(loadPublishMeta(lessonEntry.id))
+  }, [lessonEntry.id])
 
   const updateDraft = (updater) => {
     onDraftChange(updater(draft))
@@ -955,7 +982,7 @@ export function LessonAdmin({
     })
 
     setSelectedNodeId(fallbackNode?.id ?? null)
-    setStatusMessage('Card excluído.')
+    setStatusMessage('Card excluÃ­do.')
   }
 
   const handleMoveNode = (direction) => {
@@ -1019,9 +1046,11 @@ export function LessonAdmin({
   const handleCopy = async (text, label) => {
     try {
       await navigator.clipboard.writeText(text)
-      setStatusMessage(`${label} copiado para a área de transferência.`)
+      setStatusTone('success')
+      setStatusMessage(`${label} copiado para a Ã¡rea de transferÃªncia.`)
     } catch {
-      setStatusMessage(`Não consegui copiar ${label.toLowerCase()} automaticamente.`)
+      setStatusTone('warning')
+      setStatusMessage(`NÃ£o consegui copiar ${label.toLowerCase()} automaticamente.`)
     }
   }
 
@@ -1033,42 +1062,59 @@ export function LessonAdmin({
     link.download = filename
     link.click()
     URL.revokeObjectURL(url)
+    setStatusTone('success')
     setStatusMessage(`${filename} baixado.`)
   }
 
   const handleSaveDraft = () => {
     onSaveDraft(draft)
+    const savedAt = new Date().toISOString()
+    setLastDraftSavedAt(savedAt)
+    setStatusTone('success')
     setStatusMessage('Rascunho salvo neste navegador.')
   }
 
   const handleRestoreSavedDraft = () => {
     const restored = onRestoreSavedDraft()
+    setStatusTone(restored ? 'success' : 'warning')
     setStatusMessage(
       restored
-        ? 'Último rascunho salvo restaurado.'
-        : 'Não existe rascunho salvo para esta aula.',
+        ? 'Ultimo rascunho salvo restaurado.'
+        : 'Nao existe rascunho salvo para esta aula.',
     )
   }
 
   const handleResetDraft = () => {
     onResetDraft()
-    setStatusMessage('Editor restaurado para a versão original da aula.')
+    setLastDraftSavedAt(null)
+    setStatusTone('warning')
+    setStatusMessage('Editor restaurado para a versao original da aula.')
   }
-
 
   const handleSaveToRepo = async () => {
     if (!onSaveToRepo) {
+      setStatusTone('warning')
       setStatusMessage('Salvamento remoto nao configurado para esta aula.')
       return
     }
 
     try {
       setIsSavingToRepo(true)
+      setStatusTone('info')
+      setStatusMessage('Publicando alteracoes no repositorio...')
       const result = await onSaveToRepo(draft)
-      setStatusMessage(
-        result?.message ?? 'Alteracoes enviadas para o repositorio com sucesso.',
-      )
+      const publishMeta = {
+        savedAt: result?.savedAt ?? new Date().toISOString(),
+        branch: result?.branch ?? 'master',
+        commitSha: result?.commitSha ?? null,
+        commitUrl: result?.commitUrl ?? null,
+      }
+      savePublishMeta(lessonEntry.id, publishMeta)
+      setLastPublishedMeta(publishMeta)
+      setStatusTone('success')
+      setStatusMessage(result?.message ?? 'Alteracoes publicadas com sucesso.')
     } catch (error) {
+      setStatusTone('danger')
       setStatusMessage(error.message)
     } finally {
       setIsSavingToRepo(false)
@@ -1087,7 +1133,33 @@ export function LessonAdmin({
 
       </header>
 
-      {statusMessage ? <p className="admin-status">{statusMessage}</p> : null}
+      {statusMessage ? (
+        <div className={`admin-status admin-status--${statusTone}`}>
+          <strong>{statusTone === 'success' ? 'Tudo certo' : statusTone === 'danger' ? 'Algo bloqueou a publicacao' : statusTone === 'info' ? 'Publicando' : 'Atencao'}</strong>
+          <span>{statusMessage}</span>
+        </div>
+      ) : null}
+
+      <section className="admin-meta-strip">
+        <article className="admin-meta-pill">
+          <span>Rascunho local</span>
+          <strong>{formatDateTime(lastDraftSavedAt)}</strong>
+        </article>
+        <article className="admin-meta-pill admin-meta-pill--publish">
+          <span>Ultima publicacao</span>
+          <strong>{formatDateTime(lastPublishedMeta?.savedAt)}</strong>
+          <small>
+            {lastPublishedMeta?.commitSha
+              ? `Commit ${lastPublishedMeta.commitSha.slice(0, 7)} em ${lastPublishedMeta?.branch ?? 'master'}`
+              : 'Ainda nao publicada pelo editor'}
+          </small>
+          {lastPublishedMeta?.commitUrl ? (
+            <a href={lastPublishedMeta.commitUrl} target="_blank" rel="noreferrer">
+              Ver commit
+            </a>
+          ) : null}
+        </article>
+      </section>
 
       <section className="admin-workspace">
         <aside className="admin-sidebar">
@@ -1310,12 +1382,12 @@ export function LessonAdmin({
 
         <section className="admin-canvas-panel">
           <div className="admin-canvas-toolbar">
-            <ActionGroup label="Projeto">
+            <ActionGroup label="Salvar e publicar">
               <IconButton label="Salvar rascunho" variant="success" onClick={handleSaveDraft}>
                 <SaveIcon />
               </IconButton>
               <IconButton
-                label="Salvar no repositorio"
+                label="Publicar no site"
                 variant="accent"
                 onClick={handleSaveToRepo}
                 disabled={isSavingToRepo}
@@ -1328,7 +1400,7 @@ export function LessonAdmin({
               <IconButton label="Voltar ao original" variant="warning" onClick={handleResetDraft}>
                 <ResetIcon />
               </IconButton>
-              <IconButton label="Visualizar aula" variant="info" onClick={onPreview}>
+              <IconButton label="Abrir apresentacao" variant="info" onClick={onPreview}>
                 <EyeIcon />
               </IconButton>
             </ActionGroup>
@@ -1636,3 +1708,4 @@ export function LessonAdmin({
     </main>
   )
 }
+

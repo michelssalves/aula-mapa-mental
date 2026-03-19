@@ -1,4 +1,5 @@
 const draftStoragePrefix = 'aula-mapa-mental:draft:'
+const publishStoragePrefix = 'aula-mapa-mental:publish:'
 
 export function createDraft(source) {
   return {
@@ -9,6 +10,10 @@ export function createDraft(source) {
 
 function getDraftStorageKey(lessonId) {
   return `${draftStoragePrefix}${lessonId}`
+}
+
+function getPublishStorageKey(lessonId) {
+  return `${publishStoragePrefix}${lessonId}`
 }
 
 export function loadSavedDraft(lessonId) {
@@ -43,4 +48,30 @@ export function clearSavedDraft(lessonId) {
   }
 
   window.localStorage.removeItem(getDraftStorageKey(lessonId))
+}
+
+export function loadPublishMeta(lessonId) {
+  if (typeof window === 'undefined') {
+    return null
+  }
+
+  const rawMeta = window.localStorage.getItem(getPublishStorageKey(lessonId))
+
+  if (!rawMeta) {
+    return null
+  }
+
+  try {
+    return JSON.parse(rawMeta)
+  } catch {
+    return null
+  }
+}
+
+export function savePublishMeta(lessonId, meta) {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  window.localStorage.setItem(getPublishStorageKey(lessonId), JSON.stringify(meta))
 }

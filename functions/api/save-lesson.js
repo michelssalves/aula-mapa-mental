@@ -92,23 +92,13 @@ export async function onRequestOptions() {
 export async function onRequestPost(context) {
   try {
     const { env, request } = context
-    const {
-      lessonId,
-      content,
-      layout,
-      files,
-    } = await request.json()
+    const { lessonId, content, layout, files } = await request.json()
 
     if (!lessonId || !content || !layout || !files) {
       return jsonResponse({ error: 'Payload incompleto para salvar a aula.' }, 400)
     }
 
-    const {
-      contentPath,
-      layoutPath,
-      contentExportName,
-      layoutExportName,
-    } = files
+    const { contentPath, layoutPath, contentExportName, layoutExportName } = files
 
     if (!contentPath || !layoutPath || !contentExportName || !layoutExportName) {
       return jsonResponse({ error: 'Arquivos de destino nao configurados.' }, 400)
@@ -132,7 +122,7 @@ export async function onRequestPost(context) {
     const commitPrefix = env.GITHUB_COMMIT_PREFIX || 'Atualiza aula'
     const commitMessage = `${commitPrefix}: ${lessonId}`
 
-    await updateRepositoryFile({
+    const contentResult = await updateRepositoryFile({
       owner,
       repo,
       branch,
@@ -142,7 +132,7 @@ export async function onRequestPost(context) {
       commitMessage,
     })
 
-    await updateRepositoryFile({
+    const layoutResult = await updateRepositoryFile({
       owner,
       repo,
       branch,
@@ -154,12 +144,17 @@ export async function onRequestPost(context) {
 
     return jsonResponse({
       ok: true,
-      message: 'Aula salva no repositório com sucesso.',
+      message: 'Aula salva no repositorio com sucesso.',
+      savedAt: new Date().toISOString(),
+      branch,
+      commitSha: layoutResult?.commit?.sha ?? contentResult?.commit?.sha ?? null,
+      commitUrl:
+        layoutResult?.commit?.html_url ?? contentResult?.commit?.html_url ?? null,
     })
   } catch (error) {
     return jsonResponse(
       {
-        error: error instanceof Error ? error.message : 'Erro ao salvar no repositório.',
+        error: error instanceof Error ? error.message : 'Erro ao salvar no repositorio.',
       },
       500,
     )
