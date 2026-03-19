@@ -1510,69 +1510,6 @@ export function LessonAdmin({
                   </label>
                 </FoldSection>
 
-                <FoldSection title="Mapa e classificacao">
-                  <label className="admin-field">
-                    <span>Etapa</span>
-                    <select
-                      value={selectedNode.step}
-                      onChange={(event) =>
-                        updateNode(selectedNode.id, 'step', Number(event.target.value))
-                      }
-                    >
-                      {draft.content.steps.map((step, index) => (
-                        <option key={step.id} value={index}>
-                          {String(index + 1).padStart(2, '0')} - {step.title}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-
-                  <label className="admin-field">
-                    <span>Tonalidade</span>
-                    <select
-                      value={selectedNode.tone}
-                      onChange={(event) =>
-                        updateNode(selectedNode.id, 'tone', event.target.value)
-                      }
-                    >
-                      <option value="sun">Sun</option>
-                      <option value="sky">Sky</option>
-                      <option value="mint">Mint</option>
-                      <option value="rose">Rose</option>
-                    </select>
-                  </label>
-
-                  <div className="admin-grid">
-                    <label className="admin-field">
-                      <span>Posicao X</span>
-                      <input
-                        type="number"
-                        value={draft.layout.positions[selectedNode.id]?.x ?? 0}
-                        onChange={(event) =>
-                          updateNodePosition(selectedNode.id, {
-                            x: Number(event.target.value),
-                            y: draft.layout.positions[selectedNode.id]?.y ?? 0,
-                          })
-                        }
-                      />
-                    </label>
-
-                    <label className="admin-field">
-                      <span>Posicao Y</span>
-                      <input
-                        type="number"
-                        value={draft.layout.positions[selectedNode.id]?.y ?? 0}
-                        onChange={(event) =>
-                          updateNodePosition(selectedNode.id, {
-                            x: draft.layout.positions[selectedNode.id]?.x ?? 0,
-                            y: Number(event.target.value),
-                          })
-                        }
-                      />
-                    </label>
-                  </div>
-                </FoldSection>
-
                 <FoldSection title="Conteudo detalhado" defaultOpen={false}>
                   <label className="admin-field">
                     <span>Pontos principais</span>
@@ -1676,6 +1613,69 @@ export function LessonAdmin({
                       }
                     />
                   </label>
+                </FoldSection>
+
+                <FoldSection title="Mapa e classificacao">
+                  <label className="admin-field">
+                    <span>Etapa</span>
+                    <select
+                      value={selectedNode.step}
+                      onChange={(event) =>
+                        updateNode(selectedNode.id, 'step', Number(event.target.value))
+                      }
+                    >
+                      {draft.content.steps.map((step, index) => (
+                        <option key={step.id} value={index}>
+                          {String(index + 1).padStart(2, '0')} - {step.title}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label className="admin-field">
+                    <span>Tonalidade</span>
+                    <select
+                      value={selectedNode.tone}
+                      onChange={(event) =>
+                        updateNode(selectedNode.id, 'tone', event.target.value)
+                      }
+                    >
+                      <option value="sun">Sun</option>
+                      <option value="sky">Sky</option>
+                      <option value="mint">Mint</option>
+                      <option value="rose">Rose</option>
+                    </select>
+                  </label>
+
+                  <div className="admin-grid">
+                    <label className="admin-field">
+                      <span>Posicao X</span>
+                      <input
+                        type="number"
+                        value={draft.layout.positions[selectedNode.id]?.x ?? 0}
+                        onChange={(event) =>
+                          updateNodePosition(selectedNode.id, {
+                            x: Number(event.target.value),
+                            y: draft.layout.positions[selectedNode.id]?.y ?? 0,
+                          })
+                        }
+                      />
+                    </label>
+
+                    <label className="admin-field">
+                      <span>Posicao Y</span>
+                      <input
+                        type="number"
+                        value={draft.layout.positions[selectedNode.id]?.y ?? 0}
+                        onChange={(event) =>
+                          updateNodePosition(selectedNode.id, {
+                            x: draft.layout.positions[selectedNode.id]?.x ?? 0,
+                            y: Number(event.target.value),
+                          })
+                        }
+                      />
+                    </label>
+                  </div>
                 </FoldSection>
               </div>
 
