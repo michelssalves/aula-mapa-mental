@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import '@xyflow/react/dist/style.css'
 import './App.css'
 import { buildLessonBlueprint } from './data/buildLessonBlueprint'
@@ -12,6 +12,33 @@ import {
   loadSavedDraft,
   saveDraftToStorage,
 } from './utils/editorUtils'
+
+function parseHashRoute(hashValue) {
+  const normalizedHash = hashValue.replace(/^#/, '')
+  const [screen = 'catalog', lessonId = null] = normalizedHash
+    .split('/')
+    .filter(Boolean)
+
+  if (screen === 'aula' || screen === 'editor') {
+    return {
+      screen,
+      lessonId,
+    }
+  }
+
+  return {
+    screen: 'catalog',
+    lessonId: null,
+  }
+}
+
+function buildHashRoute(screen, lessonId = null) {
+  if (screen === 'aula' || screen === 'editor') {
+    return `#/${screen}/${lessonId ?? ''}`
+  }
+
+  return '#/'
+}
 
 function CatalogHome({ lessons, onOpenLesson, onOpenAdmin }) {
   const [openLessonIds, setOpenLessonIds] = useState([])
@@ -31,40 +58,40 @@ function CatalogHome({ lessons, onOpenLesson, onOpenAdmin }) {
           <span className="eyebrow">Biblioteca de aulas</span>
           <div className="catalog-hero__badge-row">
             <span className="catalog-hero__badge">Mapa mental interativo</span>
-            <span className="catalog-hero__badge">Modo apresentação</span>
+            <span className="catalog-hero__badge">Modo apresentacao</span>
           </div>
           <h1>Escolha uma aula para apresentar</h1>
           <p>
-            Organize e apresente conteúdos em formato de mapa mental, com
-            navegação por etapas e painel de leitura lateral.
+            Organize e apresente conteudos em formato de mapa mental, com
+            navegacao por etapas e painel de leitura lateral.
           </p>
           <div className="catalog-hero__highlights">
             <div>
               <strong>Narrativa guiada</strong>
-              <span>Fluxo visual que conduz a explicação card a card.</span>
+              <span>Fluxo visual que conduz a explicacao card a card.</span>
             </div>
             <div>
-              <strong>Leitura à distância</strong>
-              <span>Estrutura pensada para aulas em telas amplas e apresentações.</span>
+              <strong>Leitura a distancia</strong>
+              <span>Estrutura pensada para aulas em telas amplas e apresentacoes.</span>
             </div>
           </div>
         </div>
 
         <div className="catalog-hero__stats">
           <div className="catalog-stat catalog-stat--accent">
-            <span className="status-label">Aulas disponíveis</span>
+            <span className="status-label">Aulas disponiveis</span>
             <strong>{String(lessons.length).padStart(2, '0')}</strong>
             <p>Biblioteca pronta para crescer com novas aulas.</p>
           </div>
           <div className="catalog-stat">
             <span className="status-label">Formato</span>
             <strong>Mapa mental guiado</strong>
-            <p>Navegação progressiva com foco visual e leitura lateral.</p>
+            <p>Navegacao progressiva com foco visual e leitura lateral.</p>
           </div>
           <div className="catalog-stat">
-            <span className="status-label">Experiência</span>
-            <strong>Leitura e edição no mesmo lugar</strong>
-            <p>Abra a aula para apresentar ou entre no editor para ajustar o conteúdo.</p>
+            <span className="status-label">Experiencia</span>
+            <strong>Leitura e edicao no mesmo lugar</strong>
+            <p>Abra a aula para apresentar ou entre no editor para ajustar o conteudo.</p>
           </div>
         </div>
       </section>
@@ -101,14 +128,12 @@ function CatalogHome({ lessons, onOpenLesson, onOpenAdmin }) {
                   </div>
                 </div>
                 <span className={`catalog-accordion__chevron ${isOpen ? 'catalog-accordion__chevron--open' : ''}`}>
-                  ▾
+                  ▼
                 </span>
               </button>
 
               {isOpen ? (
-                <article
-                  className={`catalog-card catalog-card--${lessonEntry.accent}`}
-                >
+                <article className={`catalog-card catalog-card--${lessonEntry.accent}`}>
                   <div className="catalog-card__meta">
                     <span className="catalog-card__pill">{lessonEntry.category}</span>
                     <span className="catalog-card__duration">{lessonEntry.duration}</span>
@@ -120,14 +145,14 @@ function CatalogHome({ lessons, onOpenLesson, onOpenAdmin }) {
                   </div>
 
                   <div className="catalog-card__benefits">
-                    <span>Panorama bíblico da mordomia</span>
-                    <span>Leitura guiada do dízimo na Lei e no Novo Testamento</span>
-                    <span>Estrutura pronta para aula e apresentação</span>
+                    <span>Panorama biblico da mordomia</span>
+                    <span>Leitura guiada do dizimo na Lei e no Novo Testamento</span>
+                    <span>Estrutura pronta para aula e apresentacao</span>
                   </div>
 
                   <dl className="catalog-card__details">
                     <div>
-                      <dt>Público</dt>
+                      <dt>Publico</dt>
                       <dd>{lessonEntry.audience}</dd>
                     </div>
                     <div>
@@ -163,22 +188,45 @@ function CatalogHome({ lessons, onOpenLesson, onOpenAdmin }) {
 }
 
 function App() {
-  const [screen, setScreen] = useState('catalog')
-  const [activeLessonId, setActiveLessonId] = useState(null)
+  const [route, setRoute] = useState(() => parseHashRoute(window.location.hash))
   const [lessonDrafts, setLessonDrafts] = useState({})
+  const screen = route.screen
+  const activeLessonId = route.lessonId
 
   const activeLessonEntry =
     lessonsCatalog.find((lesson) => lesson.id === activeLessonId) ?? null
 
   const activeLessonDraft =
-    activeLessonEntry && lessonDrafts[activeLessonEntry.id]
-      ? lessonDrafts[activeLessonEntry.id]
+    activeLessonEntry
+      ? lessonDrafts[activeLessonEntry.id] ??
+        (screen === 'editor'
+          ? loadSavedDraft(activeLessonEntry.id) ?? createDraft(activeLessonEntry.source)
+          : null)
       : null
 
   const activeLessonBlueprint =
     activeLessonEntry && activeLessonDraft
       ? buildLessonBlueprint(activeLessonDraft.content, activeLessonDraft.layout)
       : activeLessonEntry?.blueprint ?? null
+
+  useEffect(() => {
+    const syncRoute = () => {
+      setRoute(parseHashRoute(window.location.hash))
+    }
+
+    if (!window.location.hash) {
+      window.history.replaceState(null, '', buildHashRoute('catalog'))
+    }
+
+    syncRoute()
+    window.addEventListener('hashchange', syncRoute)
+
+    return () => window.removeEventListener('hashchange', syncRoute)
+  }, [])
+
+  const navigateTo = (nextScreen, lessonId = null) => {
+    window.location.hash = buildHashRoute(nextScreen, lessonId)
+  }
 
   const openAdmin = (lessonId) => {
     const lessonEntry = lessonsCatalog.find((lesson) => lesson.id === lessonId)
@@ -195,16 +243,15 @@ function App() {
             [lessonId]: loadSavedDraft(lessonId) ?? createDraft(lessonEntry.source),
           },
     )
-    setActiveLessonId(lessonId)
-    setScreen('admin')
+
+    navigateTo('editor', lessonId)
   }
 
   const openLesson = (lessonId) => {
-    setActiveLessonId(lessonId)
-    setScreen('lesson')
+    navigateTo('aula', lessonId)
   }
 
-  if (screen === 'admin' && activeLessonEntry && activeLessonDraft) {
+  if (screen === 'editor' && activeLessonEntry && activeLessonDraft) {
     return (
       <LessonAdmin
         lessonEntry={activeLessonEntry}
@@ -215,11 +262,8 @@ function App() {
             [activeLessonEntry.id]: nextDraft,
           }))
         }
-        onBack={() => {
-          setScreen('catalog')
-          setActiveLessonId(null)
-        }}
-        onPreview={() => setScreen('lesson')}
+        onBack={() => navigateTo('catalog')}
+        onPreview={() => navigateTo('aula', activeLessonEntry.id)}
         onSaveDraft={(draftToSave) => {
           saveDraftToStorage(activeLessonEntry.id, draftToSave)
         }}
@@ -259,14 +303,11 @@ function App() {
     )
   }
 
-  if (screen === 'lesson' && activeLessonEntry && activeLessonBlueprint) {
+  if (screen === 'aula' && activeLessonEntry && activeLessonBlueprint) {
     return (
       <LessonExplorer
         lesson={activeLessonBlueprint}
-        onBack={() => {
-          setScreen('catalog')
-          setActiveLessonId(null)
-        }}
+        onBack={() => navigateTo('catalog')}
       />
     )
   }
