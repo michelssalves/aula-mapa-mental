@@ -1,45 +1,225 @@
 export const mordomiaLayout = {
-  positions: {
-    tema: { x: 120, y: 520 },
-    'tudo-deus': { x: 760, y: 120 },
-    comprados: { x: 760, y: 860 },
-    mordomo: { x: 1540, y: 120 },
-    significado: { x: 1540, y: 860 },
-    'lei-base': { x: 2360, y: 120 },
-    'para-quem': { x: 2360, y: 860 },
-    tipos: { x: 3180, y: 520 },
-    levita: { x: 3980, y: 20 },
-    'dizimos-dos-dizimos': { x: 3980, y: 420 },
-    comunhao: { x: 3980, y: 820 },
-    pobres: { x: 3980, y: 1220 },
-    ofertas: { x: 4860, y: 320 },
-    quebra: { x: 4860, y: 980 },
-    'novo-testamento': { x: 5760, y: 140 },
-    'nova-perspectiva': { x: 5760, y: 760 },
-    igreja: { x: 5760, y: 1400 },
-    conclusao: { x: 6640, y: 760 },
+  "positions": {
+    "tema": {
+      "x": 120,
+      "y": 520
+    },
+    "tudo-deus": {
+      "x": 760,
+      "y": 120
+    },
+    "comprados": {
+      "x": 760,
+      "y": 860
+    },
+    "mordomo": {
+      "x": 1540,
+      "y": 120
+    },
+    "significado": {
+      "x": 1540,
+      "y": 860
+    },
+    "lei-base": {
+      "x": 2360,
+      "y": 120
+    },
+    "para-quem": {
+      "x": 2360,
+      "y": 860
+    },
+    "tipos": {
+      "x": 3180,
+      "y": 520
+    },
+    "levita": {
+      "x": 3980,
+      "y": 20
+    },
+    "dizimos-dos-dizimos": {
+      "x": 3980,
+      "y": 420
+    },
+    "comunhao": {
+      "x": 3980,
+      "y": 820
+    },
+    "pobres": {
+      "x": 3980,
+      "y": 1220
+    },
+    "ofertas": {
+      "x": 4860,
+      "y": 320
+    },
+    "quebra": {
+      "x": 4860,
+      "y": 980
+    },
+    "novo-testamento": {
+      "x": 5760,
+      "y": 140
+    },
+    "nova-perspectiva": {
+      "x": 5760,
+      "y": 760
+    },
+    "igreja": {
+      "x": 5760,
+      "y": 1400
+    },
+    "conclusao": {
+      "x": 6640,
+      "y": 760
+    }
   },
-  edges: [
-    { id: 'e1', source: 'tema', target: 'tudo-deus', step: 0, color: '#3a7bd5' },
-    { id: 'e2', source: 'tema', target: 'comprados', step: 0, color: '#149f6a' },
-    { id: 'e3', source: 'tudo-deus', target: 'mordomo', step: 1, color: '#3a7bd5' },
-    { id: 'e4', source: 'comprados', target: 'significado', step: 1, color: '#149f6a' },
-    { id: 'e5', source: 'mordomo', target: 'lei-base', step: 2, color: '#d18817' },
-    { id: 'e6', source: 'significado', target: 'para-quem', step: 2, color: '#c45c47' },
-    { id: 'e7', source: 'lei-base', target: 'tipos', step: 3, color: '#d18817' },
-    { id: 'e8', source: 'para-quem', target: 'tipos', step: 3, color: '#c45c47' },
-    { id: 'e9', source: 'tipos', target: 'levita', step: 3, color: '#3a7bd5' },
-    { id: 'e10', source: 'tipos', target: 'dizimos-dos-dizimos', step: 3, color: '#149f6a' },
-    { id: 'e11', source: 'tipos', target: 'comunhao', step: 3, color: '#d18817' },
-    { id: 'e12', source: 'tipos', target: 'pobres', step: 3, color: '#c45c47' },
-    { id: 'e13', source: 'levita', target: 'ofertas', step: 4, color: '#149f6a' },
-    { id: 'e14', source: 'pobres', target: 'quebra', step: 4, color: '#c45c47' },
-    { id: 'e15', source: 'comunhao', target: 'ofertas', step: 4, color: '#d18817' },
-    { id: 'e16', source: 'ofertas', target: 'novo-testamento', step: 5, color: '#3a7bd5' },
-    { id: 'e17', source: 'quebra', target: 'nova-perspectiva', step: 5, color: '#d18817' },
-    { id: 'e18', source: 'ofertas', target: 'igreja', step: 5, color: '#149f6a' },
-    { id: 'e19', source: 'novo-testamento', target: 'conclusao', step: 5, color: '#3a7bd5' },
-    { id: 'e20', source: 'nova-perspectiva', target: 'conclusao', step: 5, color: '#d18817' },
-    { id: 'e21', source: 'igreja', target: 'conclusao', step: 5, color: '#149f6a' },
-  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "tema",
+      "target": "tudo-deus",
+      "step": 0,
+      "color": "#3a7bd5"
+    },
+    {
+      "id": "e2",
+      "source": "tema",
+      "target": "comprados",
+      "step": 0,
+      "color": "#149f6a"
+    },
+    {
+      "id": "e3",
+      "source": "tudo-deus",
+      "target": "mordomo",
+      "step": 1,
+      "color": "#3a7bd5"
+    },
+    {
+      "id": "e4",
+      "source": "comprados",
+      "target": "significado",
+      "step": 1,
+      "color": "#149f6a"
+    },
+    {
+      "id": "e5",
+      "source": "mordomo",
+      "target": "lei-base",
+      "step": 2,
+      "color": "#d18817"
+    },
+    {
+      "id": "e6",
+      "source": "significado",
+      "target": "para-quem",
+      "step": 2,
+      "color": "#c45c47"
+    },
+    {
+      "id": "e7",
+      "source": "lei-base",
+      "target": "tipos",
+      "step": 3,
+      "color": "#d18817"
+    },
+    {
+      "id": "e8",
+      "source": "para-quem",
+      "target": "tipos",
+      "step": 3,
+      "color": "#c45c47"
+    },
+    {
+      "id": "e9",
+      "source": "tipos",
+      "target": "levita",
+      "step": 3,
+      "color": "#3a7bd5"
+    },
+    {
+      "id": "e10",
+      "source": "tipos",
+      "target": "dizimos-dos-dizimos",
+      "step": 3,
+      "color": "#149f6a"
+    },
+    {
+      "id": "e11",
+      "source": "tipos",
+      "target": "comunhao",
+      "step": 3,
+      "color": "#d18817"
+    },
+    {
+      "id": "e12",
+      "source": "tipos",
+      "target": "pobres",
+      "step": 3,
+      "color": "#c45c47"
+    },
+    {
+      "id": "e13",
+      "source": "levita",
+      "target": "ofertas",
+      "step": 4,
+      "color": "#149f6a"
+    },
+    {
+      "id": "e14",
+      "source": "pobres",
+      "target": "quebra",
+      "step": 4,
+      "color": "#c45c47"
+    },
+    {
+      "id": "e15",
+      "source": "comunhao",
+      "target": "ofertas",
+      "step": 4,
+      "color": "#d18817"
+    },
+    {
+      "id": "e16",
+      "source": "ofertas",
+      "target": "novo-testamento",
+      "step": 5,
+      "color": "#3a7bd5"
+    },
+    {
+      "id": "e17",
+      "source": "quebra",
+      "target": "nova-perspectiva",
+      "step": 5,
+      "color": "#d18817"
+    },
+    {
+      "id": "e18",
+      "source": "ofertas",
+      "target": "igreja",
+      "step": 5,
+      "color": "#149f6a"
+    },
+    {
+      "id": "e19",
+      "source": "novo-testamento",
+      "target": "conclusao",
+      "step": 5,
+      "color": "#3a7bd5"
+    },
+    {
+      "id": "e20",
+      "source": "nova-perspectiva",
+      "target": "conclusao",
+      "step": 5,
+      "color": "#d18817"
+    },
+    {
+      "id": "e21",
+      "source": "igreja",
+      "target": "conclusao",
+      "step": 5,
+      "color": "#149f6a"
+    }
+  ]
 }
