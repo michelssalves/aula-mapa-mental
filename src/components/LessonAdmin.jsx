@@ -1138,13 +1138,31 @@ export function LessonAdmin({
     <main className="admin-shell">
       <header className="admin-header">
         <div className="admin-header__copy">
-          <button type="button" className="back-link back-link--eyebrow" onClick={onBack}>
-            <span className="eyebrow">Home</span>
-          </button>
-          <h1>{draft.content.meta.title}</h1>
-          <span className="eyebrow">Editor visual da aula</span>
+          <div className="admin-header__eyebrows">
+            <button type="button" className="back-link back-link--eyebrow" onClick={onBack}>
+              <span className="eyebrow">Home</span>
+            </button>
+            <span className="eyebrow">Editor visual da aula</span>
+          </div>
+          <div className="admin-header__headline">
+            <h1>{draft.content.meta.title}</h1>
+            <div className="admin-header__meta-inline">
+              <span className={`admin-meta-state ${hasPendingChanges ? 'admin-meta-state--warning' : 'admin-meta-state--success'}`}>
+                {hasPendingChanges ? 'Alteracoes pendentes' : 'Publicado'}
+              </span>
+              <span className="admin-header__meta-chip">
+                {lastDraftSavedAt
+                  ? `Rascunho ${formatDateTime(lastDraftSavedAt)}`
+                  : 'Sem rascunho local'}
+              </span>
+              <span className="admin-header__meta-chip admin-header__meta-chip--publish">
+                {lastPublishedMeta?.savedAt
+                  ? `Publicado ${formatDateTime(lastPublishedMeta.savedAt)}`
+                  : 'Ainda nao publicado'}
+              </span>
+            </div>
+          </div>
         </div>
-
       </header>
 
       {statusMessage ? (
@@ -1163,32 +1181,6 @@ export function LessonAdmin({
           ) : null}
         </div>
       ) : null}
-
-      <section className="admin-meta-strip">
-        <article className="admin-meta-pill">
-          <span className={`admin-meta-state ${hasPendingChanges ? 'admin-meta-state--warning' : 'admin-meta-state--success'}`}>
-            {hasPendingChanges ? 'Alteracoes pendentes' : 'Publicado'}
-          </span>
-          <span>Rascunho local</span>
-          <strong>{formatDateTime(lastDraftSavedAt)}</strong>
-        </article>
-        <article className="admin-meta-pill admin-meta-pill--publish">
-          <span>Ultima publicacao</span>
-          <strong>{formatDateTime(lastPublishedMeta?.savedAt)}</strong>
-          <small>
-            {lastPublishedMeta?.commitSha
-              ? `Commit ${lastPublishedMeta.commitSha.slice(0, 7)} em ${lastPublishedMeta?.branch ?? 'master'}`
-              : lastPublishedMeta?.savedAt
-                ? 'Versao ao vivo gravada no D1'
-              : 'Ainda nao publicada pelo editor'}
-          </small>
-          {lastPublishedMeta?.commitUrl ? (
-            <a href={lastPublishedMeta.commitUrl} target="_blank" rel="noreferrer">
-              Ver commit
-            </a>
-          ) : null}
-        </article>
-      </section>
 
       <section className="admin-workspace">
         <aside className="admin-sidebar">

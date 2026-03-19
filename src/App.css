@@ -1237,8 +1237,8 @@
 .admin-header {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 18px;
-  margin-bottom: 18px;
+  gap: 12px;
+  margin-bottom: 12px;
   align-items: start;
 }
 
@@ -1257,17 +1257,63 @@
 }
 
 .admin-header__copy {
-  padding: 24px 26px;
+  padding: 16px 20px;
+  display: grid;
+  gap: 10px;
 }
 
 .admin-header__copy h1 {
-  margin: 8px 0 12px;
+  margin: 0;
+  font-size: clamp(2.15rem, 3vw, 3.5rem);
+  line-height: 0.94;
+  letter-spacing: -0.05em;
 }
 
 .admin-header__copy p {
   margin: 0;
   max-width: 60ch;
   color: var(--text-soft);
+}
+
+.admin-header__eyebrows {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-header__headline {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.admin-header__meta-inline {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.admin-header__meta-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 248, 236, 0.74);
+  box-shadow: inset 0 0 0 1px rgba(94, 66, 18, 0.06);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.admin-header__meta-chip--publish {
+  background: linear-gradient(180deg, rgba(255, 244, 230, 0.92), rgba(255, 250, 240, 0.88));
 }
 
 .admin-action-group {
@@ -1396,11 +1442,13 @@
 }
 
 .admin-status {
-  margin: 0 0 14px;
-  padding: 14px 16px;
+  margin: 0 0 12px;
+  padding: 12px 14px;
   border-radius: 18px;
-  display: grid;
-  gap: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
   background: rgba(20, 159, 106, 0.1);
   border: 1px solid rgba(20, 159, 106, 0.18);
   color: #0d6c48;
@@ -1408,19 +1456,20 @@
 }
 
 .admin-status strong {
-  font-size: 0.92rem;
+  font-size: 0.9rem;
 }
 
 .admin-status span {
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 600;
+  flex: 1 1 420px;
 }
 
 .admin-status__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 8px;
+  margin-left: auto;
 }
 
 .admin-status__button {
@@ -1457,30 +1506,13 @@
   color: #8b3124;
 }
 
-.admin-meta-strip {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  margin: 0 0 18px;
-}
-
-.admin-meta-pill {
-  display: grid;
-  gap: 4px;
-  padding: 14px 16px;
-  border-radius: 18px;
-  background: rgba(255, 248, 236, 0.62);
-  box-shadow:
-    inset 0 0 0 1px rgba(94, 66, 18, 0.06),
-    0 18px 30px rgba(201, 168, 108, 0.12);
-}
-
 .admin-meta-state {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-height: 36px;
   width: fit-content;
-  padding: 6px 10px;
+  padding: 8px 12px;
   border-radius: 999px;
   font-size: 0.72rem;
   font-weight: 800;
@@ -1496,36 +1528,6 @@
 .admin-meta-state--warning {
   background: rgba(209, 136, 23, 0.14);
   color: #8a5b00;
-}
-
-.admin-meta-pill span,
-.admin-meta-pill small,
-.admin-meta-pill a {
-  font-size: 0.76rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.admin-meta-pill strong {
-  color: var(--text-strong);
-  font-size: 1rem;
-}
-
-.admin-meta-pill small {
-  text-transform: none;
-  letter-spacing: normal;
-}
-
-.admin-meta-pill a {
-  text-transform: none;
-  letter-spacing: normal;
-  font-weight: 700;
-  color: #2459a7;
-}
-
-.admin-meta-pill--publish {
-  background: linear-gradient(180deg, rgba(255, 244, 230, 0.9), rgba(255, 250, 240, 0.88));
 }
 
 .admin-workspace {
@@ -1884,7 +1886,7 @@
 
 .admin-canvas-panel {
   border-radius: 30px;
-  overflow: hidden;
+  overflow: visible;
   min-height: calc(100vh - 170px);
 }
 
@@ -1893,12 +1895,23 @@
   justify-content: center;
   gap: 12px;
   flex-wrap: wrap;
-  padding: 18px 18px 0;
+  padding: 12px 14px 10px;
+  position: sticky;
+  top: 12px;
+  z-index: 18;
+  margin: 0 10px;
+  border-radius: 24px;
+  background: rgba(255, 250, 242, 0.92);
+  border: 1px solid rgba(94, 66, 18, 0.1);
+  box-shadow: 0 16px 32px rgba(53, 39, 12, 0.1);
+  backdrop-filter: blur(16px);
 }
 
 .admin-canvas-frame {
   min-height: calc(100vh - 170px);
   height: calc(100vh - 170px);
+  border-radius: 0 0 30px 30px;
+  overflow: hidden;
 }
 
 .admin-canvas-frame .react-flow {
