@@ -1,6 +1,6 @@
 export const mordomiaContent = {
   "meta": {
-    "title": "Mordomia, Dízimo e Contribuição",
+    "title": "aaa Mordomia, Dízimo e Contribuição",
     "description": "teste Uma aula em mapa mental sobre soberania de Deus, mordomia cristã, contexto bíblico do dízimo e a ênfase do Novo Testamento na generosidade e no coração."
   },
   "steps": [
@@ -46,7 +46,7 @@ export const mordomiaContent = {
       "id": "tema",
       "step": 0,
       "title": "Mordomia, Dízimo e Contribuição",
-      "summary": "Panorama da **aulaaaaaaaa**.",
+      "summary": "Panorama da aulaaaaaaaa.",
       "points": [
         "Tudo pertence a Deus",
         "O homem é mordomo",
