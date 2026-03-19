@@ -1,351 +1,350 @@
 export const mordomiaContent = {
-  meta: {
-    title: 'Mordomia, Dízimo e Contribuição',
-    description:
-      'Uma aula em mapa mental sobre soberania de Deus, mordomia cristã, contexto bíblico do dízimo e a ênfase do Novo Testamento na generosidade e no coração.',
+  "meta": {
+    "title": "aaa Mordomia, Dízimo e Contribuição",
+    "description": "teste Uma aula em mapa mental sobre soberania de Deus, mordomia cristã, contexto bíblico do dízimo e a ênfase do Novo Testamento na generosidade e no coração."
   },
-  steps: [
+  "steps": [
     {
-      id: 'step-1',
-      title: 'Fundamento da mordomia',
-      summary: 'Tudo pertence a Deus e o homem administra o que recebeu.',
-      focus: 'A aula começa na soberania de Deus e no pertencimento total ao Senhor.',
+      "id": "step-1",
+      "title": "Fundamento da mordomia",
+      "summary": "Tudo pertence a Deus e o homem administra o que recebeu.",
+      "focus": "A aula começa na soberania de Deus e no pertencimento total ao Senhor."
     },
     {
-      id: 'step-2',
-      title: 'Identidade do mordomo',
-      summary: 'A vida do cristão pertence a Deus e a fidelidade faz parte da espiritualidade.',
-      focus: 'O aluno entende que mordomia não é só dinheiro, mas vida entregue.',
+      "id": "step-2",
+      "title": "Identidade do mordomo",
+      "summary": "A vida do cristão pertence a Deus e a fidelidade faz parte da espiritualidade.",
+      "focus": "O aluno entende que mordomia não é só dinheiro, mas vida entregue."
     },
     {
-      id: 'step-3',
-      title: 'Origem e significado do dízimo',
-      summary: 'O dízimo aparece antes da Lei e ganha forma específica na Lei.',
-      focus: 'O mapa diferencia gesto voluntário patriarcal e regulação mosaica.',
+      "id": "step-3",
+      "title": "Origem e significado do dízimo",
+      "summary": "O dízimo aparece antes da Lei e ganha forma específica na Lei.",
+      "focus": "O mapa diferencia gesto voluntário patriarcal e regulação mosaica."
     },
     {
-      id: 'step-4',
-      title: 'Destinação e tipos de dízimo',
-      summary: 'A Lei mostra finalidades diferentes: levitas, sacerdotes, comunhão e pobres.',
-      focus: 'A contribuição no Antigo Testamento tinha função litúrgica e social.',
+      "id": "step-4",
+      "title": "Destinação e tipos de dízimo",
+      "summary": "A Lei mostra finalidades diferentes: levitas, sacerdotes, comunhão e pobres.",
+      "focus": "A contribuição no Antigo Testamento tinha função litúrgica e social."
     },
     {
-      id: 'step-5',
-      title: 'Outras ofertas e quebra da Lei',
-      summary: 'Havia várias formas de contribuição e os profetas denunciaram a negligência.',
-      focus: 'O aluno percebe que a infidelidade feria culto e justiça social.',
+      "id": "step-5",
+      "title": "Outras ofertas e quebra da Lei",
+      "summary": "Havia várias formas de contribuição e os profetas denunciaram a negligência.",
+      "focus": "O aluno percebe que a infidelidade feria culto e justiça social."
     },
     {
-      id: 'step-6',
-      title: 'Novo Testamento',
-      summary: 'Jesus e a igreja primitiva enfatizam coração, justiça, alegria e cuidado com o próximo.',
-      focus: 'A conclusão sai do mero cálculo e vai para senhorio, generosidade e fidelidade.',
-    },
+      "id": "step-6",
+      "title": "Novo Testamento",
+      "summary": "Jesus e a igreja primitiva enfatizam coração, justiça, alegria e cuidado com o próximo.",
+      "focus": "A conclusão sai do mero cálculo e vai para senhorio, generosidade e fidelidade."
+    }
   ],
-  nodes: [
+  "nodes": [
     {
-      id: 'tema',
-      step: 0,
-      title: 'Mordomia, Dízimo e Contribuição',
-      summary: 'Panorama da aula.',
-      points: [
-        'Tudo pertence a Deus',
-        'O homem é mordomo',
-        'A questão principal não é apenas quanto se dá, mas quem governa o coração',
+      "id": "tema",
+      "step": 0,
+      "title": "Mordomia, Dízimo e Contribuição",
+      "summary": "Panorama da aula.",
+      "points": [
+        "Tudo pertence a Deus",
+        "O homem é mordomo",
+        "A questão principal não é apenas quanto se dá, mas quem governa o coração"
       ],
-      scriptures: [],
-      tone: 'sun',
+      "scriptures": [],
+      "tone": "sun"
     },
     {
-      id: 'tudo-deus',
-      step: 0,
-      title: 'Tudo pertence a Deus',
-      summary: 'A contribuição nasce do reconhecimento da soberania de Deus.',
-      points: [
-        'Deus é dono de tudo',
-        'O homem é administrador',
-        'Nada do que temos é autônomo diante do Senhor',
+      "id": "tudo-deus",
+      "step": 0,
+      "title": "Tudo pertence a Deus",
+      "summary": "A contribuição nasce do reconhecimento da soberania de Deus.",
+      "points": [
+        "Deus é dono de tudo",
+        "O homem é administrador",
+        "Nada do que temos é autônomo diante do Senhor"
       ],
-      scriptures: [
-        'Salmos 24:1 — Deus é dono da terra e de tudo o que nela existe',
-        'Ageu 2:8 — A prata e o ouro pertencem ao Senhor',
-        '1 Crônicas 29:11-14 — Tudo vem de Deus, e o homem apenas devolve o que recebeu',
+      "scriptures": [
+        "Salmos 24:1 — Deus é dono da terra e de tudo o que nela existe",
+        "Ageu 2:8 — A prata e o ouro pertencem ao Senhor",
+        "1 Crônicas 29:11-14 — Tudo vem de Deus, e o homem apenas devolve o que recebeu"
       ],
-      tone: 'sky',
+      "tone": "sky"
     },
     {
-      id: 'comprados',
-      step: 0,
-      title: 'Fomos comprados por Deus',
-      summary: 'Nossa vida e nossos recursos pertencem ao Senhor.',
-      points: [
-        'Nossa vida pertence ao Senhor',
-        'Nosso corpo pertence ao Senhor',
-        'Nossos recursos pertencem ao Senhor',
+      "id": "comprados",
+      "step": 0,
+      "title": "Fomos comprados por Deus",
+      "summary": "Nossa vida e nossos recursos pertencem ao Senhor.",
+      "points": [
+        "Nossa vida pertence ao Senhor",
+        "Nosso corpo pertence ao Senhor",
+        "Nossos recursos pertencem ao Senhor"
       ],
-      scriptures: [
-        '1 Coríntios 6:20 — Fomos comprados por preço e devemos glorificar a Deus',
-        '1 Pedro 1:18-19 — Fomos resgatados pelo precioso sangue de Cristo',
-        'Tito 2:14 — Cristo se entregou para remir e purificar um povo seu',
-        'Apocalipse 5:9 — Jesus comprou para Deus pessoas de toda tribo, língua e nação',
+      "scriptures": [
+        "1 Coríntios 6:20 — Fomos comprados por preço e devemos glorificar a Deus",
+        "1 Pedro 1:18-19 — Fomos resgatados pelo precioso sangue de Cristo",
+        "Tito 2:14 — Cristo se entregou para remir e purificar um povo seu",
+        "Apocalipse 5:9 — Jesus comprou para Deus pessoas de toda tribo, língua e nação"
       ],
-      tone: 'mint',
+      "tone": "mint"
     },
     {
-      id: 'mordomo',
-      step: 1,
-      title: 'O cristão como mordomo',
-      summary: 'Administração fiel é parte da vida espiritual.',
-      points: [
-        'O cristão é mordomo, não dono',
-        'Fidelidade no pouco',
-        'Administração é parte da vida espiritual',
+      "id": "mordomo",
+      "step": 1,
+      "title": "O cristão como mordomo",
+      "summary": "Administração fiel é parte da vida espiritual.",
+      "points": [
+        "O cristão é mordomo, não dono",
+        "Fidelidade no pouco",
+        "Administração é parte da vida espiritual"
       ],
-      scriptures: [
-        'Lucas 16:10-11 — Quem é fiel no pouco também é no muito',
-        'Salmos 50:10-12 — Tudo no mundo pertence a Deus',
+      "scriptures": [
+        "Lucas 16:10-11 — Quem é fiel no pouco também é no muito",
+        "Salmos 50:10-12 — Tudo no mundo pertence a Deus"
       ],
-      tone: 'sky',
+      "tone": "sky"
     },
     {
-      id: 'significado',
-      step: 1,
-      title: 'O que significa dízimo',
-      summary: 'Dízimo significa décima parte.',
-      points: [
-        'Primeiras aparições com Abraão',
-        'Aparece também com Jacó',
-        'Antes da Lei, surge em atos voluntários',
+      "id": "significado",
+      "step": 1,
+      "title": "O que significa dízimo",
+      "summary": "Dízimo significa décima parte.",
+      "points": [
+        "Primeiras aparições com Abraão",
+        "Aparece também com Jacó",
+        "Antes da Lei, surge em atos voluntários"
       ],
-      scriptures: [
-        'Gênesis 14:20 — Abraão entrega o dízimo após a vitória da batalha',
-        'Gênesis 28:22 — Jacó promete dar o dízimo em resposta à bênção de Deus',
+      "scriptures": [
+        "Gênesis 14:20 — Abraão entrega o dízimo após a vitória da batalha",
+        "Gênesis 28:22 — Jacó promete dar o dízimo em resposta à bênção de Deus"
       ],
-      tone: 'mint',
+      "tone": "mint"
     },
     {
-      id: 'lei-base',
-      step: 2,
-      title: 'O dízimo na Lei',
-      summary: 'Na Lei, o dízimo tinha contexto concreto e agrícola.',
-      points: [
-        'Ligado à terra',
-        'Ligado aos rebanhos',
-        'Não era originalmente centrado em dinheiro',
+      "id": "lei-base",
+      "step": 2,
+      "title": "O dízimo na Lei",
+      "summary": "Na Lei, o dízimo tinha contexto concreto e agrícola.",
+      "points": [
+        "Ligado à terra",
+        "Ligado aos rebanhos",
+        "Não era originalmente centrado em dinheiro"
       ],
-      scriptures: [
-        'Levítico 27:30-33 — O dízimo era da produção da terra e dos animais',
-        'Deuteronômio 14:22 — Israel devia separar o dízimo da colheita todos os anos',
+      "scriptures": [
+        "Levítico 27:30-33 — O dízimo era da produção da terra e dos animais",
+        "Deuteronômio 14:22 — Israel devia separar o dízimo da colheita todos os anos"
       ],
-      tone: 'sun',
+      "tone": "sun"
     },
     {
-      id: 'para-quem',
-      step: 2,
-      title: 'Para quem era o dízimo',
-      summary: 'O dízimo sustentava serviço e pessoas ligadas ao culto.',
-      points: [
-        'Sustento dos levitas',
-        'Os levitas não tinham herança de terra',
-        'Ligado ao serviço do tabernáculo e do templo',
+      "id": "para-quem",
+      "step": 2,
+      "title": "Para quem era o dízimo",
+      "summary": "O dízimo sustentava serviço e pessoas ligadas ao culto.",
+      "points": [
+        "Sustento dos levitas",
+        "Os levitas não tinham herança de terra",
+        "Ligado ao serviço do tabernáculo e do templo"
       ],
-      scriptures: [
-        'Números 18:21-24 — Os dízimos foram dados aos levitas como herança',
-        'Números 18:26 — Os levitas também deviam ofertar o dízimo dos dízimos',
+      "scriptures": [
+        "Números 18:21-24 — Os dízimos foram dados aos levitas como herança",
+        "Números 18:26 — Os levitas também deviam ofertar o dízimo dos dízimos"
       ],
-      tone: 'rose',
+      "tone": "rose"
     },
     {
-      id: 'tipos',
-      step: 3,
-      title: 'Tipos de dízimo na Lei',
-      summary: 'A Lei apresenta finalidades distintas para o dízimo.',
-      points: [
-        'Dízimo do levita',
-        'Dízimo dos dízimos',
-        'Dízimo da comunhão',
-        'Dízimo dos pobres',
+      "id": "tipos",
+      "step": 3,
+      "title": "Tipos de dízimo na Lei",
+      "summary": "A Lei apresenta finalidades distintas para o dízimo.",
+      "points": [
+        "Dízimo do levita",
+        "Dízimo dos dízimos",
+        "Dízimo da comunhão",
+        "Dízimo dos pobres"
       ],
-      scriptures: [],
-      tone: 'sun',
+      "scriptures": [],
+      "tone": "sun"
     },
     {
-      id: 'levita',
-      step: 3,
-      title: 'Dízimo do levita',
-      summary: 'Sustento ministerial regular.',
-      points: [
-        'Sustento ministerial',
-        'Todo ano',
-        'O levita não deveria ser desamparado',
+      "id": "levita",
+      "step": 3,
+      "title": "Dízimo do levita",
+      "summary": "Sustento ministerial regular.",
+      "points": [
+        "Sustento ministerial",
+        "Todo ano",
+        "O levita não deveria ser desamparado"
       ],
-      scriptures: [
-        'Números 18:20-21 — Os levitas viviam do dízimo porque não tinham herança',
-        'Deuteronômio 14:27 — O levita não deveria ser desamparado',
+      "scriptures": [
+        "Números 18:20-21 — Os levitas viviam do dízimo porque não tinham herança",
+        "Deuteronômio 14:27 — O levita não deveria ser desamparado"
       ],
-      tone: 'sky',
+      "tone": "sky"
     },
     {
-      id: 'dizimos-dos-dizimos',
-      step: 3,
-      title: 'Dízimo dos dízimos',
-      summary: 'Os próprios levitas também ofertavam.',
-      points: [
-        'Levitas também ofertavam',
-        'Parte entregue aos sacerdotes',
+      "id": "dizimos-dos-dizimos",
+      "step": 3,
+      "title": "Dízimo dos dízimos",
+      "summary": "Os próprios levitas também ofertavam.",
+      "points": [
+        "Levitas também ofertavam",
+        "Parte entregue aos sacerdotes"
       ],
-      scriptures: [
-        'Números 18:26 — Os levitas entregavam a décima parte do que recebiam',
-        'Neemias 10:38 — O dízimo dos dízimos era levado à casa de Deus',
+      "scriptures": [
+        "Números 18:26 — Os levitas entregavam a décima parte do que recebiam",
+        "Neemias 10:38 — O dízimo dos dízimos era levado à casa de Deus"
       ],
-      tone: 'mint',
+      "tone": "mint"
     },
     {
-      id: 'comunhao',
-      step: 3,
-      title: 'Dízimo da comunhão',
-      summary: 'Celebração diante do Senhor.',
-      points: [
-        'Festa diante do Senhor',
-        'Alegria, gratidão e comunhão',
+      "id": "comunhao",
+      "step": 3,
+      "title": "Dízimo da comunhão",
+      "summary": "Celebração diante do Senhor.",
+      "points": [
+        "Festa diante do Senhor",
+        "Alegria, gratidão e comunhão"
       ],
-      scriptures: [
-        'Deuteronômio 14:24-26 — O dízimo podia ser convertido em dinheiro para a celebração',
-        'Deuteronômio 14:27 — O levita também participava da comunhão',
+      "scriptures": [
+        "Deuteronômio 14:24-26 — O dízimo podia ser convertido em dinheiro para a celebração",
+        "Deuteronômio 14:27 — O levita também participava da comunhão"
       ],
-      tone: 'sun',
+      "tone": "sun"
     },
     {
-      id: 'pobres',
-      step: 3,
-      title: 'Dízimo dos pobres',
-      summary: 'A cada três anos, com foco nos vulneráveis.',
-      points: [
-        'Cuidado com levita',
-        'Cuidado com estrangeiro, órfão e viúva',
-        'Expressa justiça social na Lei',
+      "id": "pobres",
+      "step": 3,
+      "title": "Dízimo dos pobres",
+      "summary": "A cada três anos, com foco nos vulneráveis.",
+      "points": [
+        "Cuidado com levita",
+        "Cuidado com estrangeiro, órfão e viúva",
+        "Expressa justiça social na Lei"
       ],
-      scriptures: [
-        'Deuteronômio 14:28-29 — O dízimo do terceiro ano era para sustento dos necessitados',
-        'Deuteronômio 26:12 — O dízimo era repartido entre os vulneráveis',
-        'Deuteronômio 10:18 — Deus ama e faz justiça ao órfão, viúva e estrangeiro',
+      "scriptures": [
+        "Deuteronômio 14:28-29 — O dízimo do terceiro ano era para sustento dos necessitados",
+        "Deuteronômio 26:12 — O dízimo era repartido entre os vulneráveis",
+        "Deuteronômio 10:18 — Deus ama e faz justiça ao órfão, viúva e estrangeiro"
       ],
-      tone: 'rose',
+      "tone": "rose"
     },
     {
-      id: 'ofertas',
-      step: 4,
-      title: 'Outras ofertas',
-      summary: 'Deus abriu caminho para todos contribuírem.',
-      points: [
-        'Oferta anual para o templo',
-        'Meio siclo',
-        'Oferta voluntária',
-        'Oferta de animais, cereais, aves, ouro, prata e bens',
+      "id": "ofertas",
+      "step": 4,
+      "title": "Outras ofertas",
+      "summary": "Deus abriu caminho para todos contribuírem.",
+      "points": [
+        "Oferta anual para o templo",
+        "Meio siclo",
+        "Oferta voluntária",
+        "Oferta de animais, cereais, aves, ouro, prata e bens"
       ],
-      scriptures: [
-        'Neemias 10:32 — Havia contribuição anual para o serviço do templo',
-        'Êxodo 30:13 e 30:16 — Cada pessoa dava meio siclo para o serviço da congregação',
-        'Levítico 22:21 — Havia oferta voluntária apresentada ao Senhor',
-        'Levítico 1:2-3 — Quem tinha rebanho podia ofertar animais',
-        'Levítico 2:1 — Também se podia ofertar farinha e cereais',
-        'Levítico 1:14 — Os mais pobres podiam ofertar aves',
-        'Êxodo 35:22 — O povo também ofertava ouro e objetos de valor',
-        'Deuteronômio 16:17 — Cada um ofertava segundo a bênção recebida',
+      "scriptures": [
+        "Neemias 10:32 — Havia contribuição anual para o serviço do templo",
+        "Êxodo 30:13 e 30:16 — Cada pessoa dava meio siclo para o serviço da congregação",
+        "Levítico 22:21 — Havia oferta voluntária apresentada ao Senhor",
+        "Levítico 1:2-3 — Quem tinha rebanho podia ofertar animais",
+        "Levítico 2:1 — Também se podia ofertar farinha e cereais",
+        "Levítico 1:14 — Os mais pobres podiam ofertar aves",
+        "Êxodo 35:22 — O povo também ofertava ouro e objetos de valor",
+        "Deuteronômio 16:17 — Cada um ofertava segundo a bênção recebida"
       ],
-      tone: 'mint',
+      "tone": "mint"
     },
     {
-      id: 'quebra',
-      step: 4,
-      title: 'Quebra da Lei',
-      summary: 'A negligência afetava culto e justiça social.',
-      points: [
-        'Negligência dos dízimos e ofertas',
-        'Prejuízo ao culto',
-        'Prejuízo à justiça social',
-        'Profetas denunciaram o problema',
+      "id": "quebra",
+      "step": 4,
+      "title": "Quebra da Lei",
+      "summary": "A negligência afetava culto e justiça social.",
+      "points": [
+        "Negligência dos dízimos e ofertas",
+        "Prejuízo ao culto",
+        "Prejuízo à justiça social",
+        "Profetas denunciaram o problema"
       ],
-      scriptures: [
-        'Neemias 13:10-12 — A falta dos dízimos fez os levitas abandonarem o serviço',
-        'Malaquias 3:8-10 — O povo foi acusado de reter dízimos e ofertas',
-        'Amós 5:21-24 — Deus rejeita culto sem justiça e retidão',
+      "scriptures": [
+        "Neemias 13:10-12 — A falta dos dízimos fez os levitas abandonarem o serviço",
+        "Malaquias 3:8-10 — O povo foi acusado de reter dízimos e ofertas",
+        "Amós 5:21-24 — Deus rejeita culto sem justiça e retidão"
       ],
-      tone: 'rose',
+      "tone": "rose"
     },
     {
-      id: 'novo-testamento',
-      step: 5,
-      title: 'O dízimo no Novo Testamento',
-      summary: 'Jesus fala do assunto no contexto da Lei.',
-      points: [
-        'Poucas menções diretas',
-        'Ênfase em justiça, misericórdia e fé',
-        'Ênfase também no amor de Deus',
+      "id": "novo-testamento",
+      "step": 5,
+      "title": "O dízimo no Novo Testamento",
+      "summary": "Jesus fala do assunto no contexto da Lei.",
+      "points": [
+        "Poucas menções diretas",
+        "Ênfase em justiça, misericórdia e fé",
+        "Ênfase também no amor de Deus"
       ],
-      scriptures: [
-        'Mateus 23:23 — Jesus denuncia quem dizima, mas negligencia justiça, misericórdia e fé',
-        'Lucas 11:42 — Jesus repreende a prática religiosa sem amor e justiça',
+      "scriptures": [
+        "Mateus 23:23 — Jesus denuncia quem dizima, mas negligencia justiça, misericórdia e fé",
+        "Lucas 11:42 — Jesus repreende a prática religiosa sem amor e justiça"
       ],
-      tone: 'sky',
+      "tone": "sky"
     },
     {
-      id: 'nova-perspectiva',
-      step: 5,
-      title: 'Nova perspectiva sobre ofertas',
-      summary: 'O Novo Testamento desloca a ênfase para o coração.',
-      points: [
-        'Oferta em secreto',
-        'Onde está o tesouro, ali estará o coração',
-        'Dinheiro não pode ser senhor',
-        'Responsabilidade terrena',
-        'Oferta e coração',
-        'Oferta e reconciliação',
+      "id": "nova-perspectiva",
+      "step": 5,
+      "title": "Nova perspectiva sobre ofertas",
+      "summary": "O Novo Testamento desloca a ênfase para o coração.",
+      "points": [
+        "Oferta em secreto",
+        "Onde está o tesouro, ali estará o coração",
+        "Dinheiro não pode ser senhor",
+        "Responsabilidade terrena",
+        "Oferta e coração",
+        "Oferta e reconciliação"
       ],
-      scriptures: [
-        'Mateus 6:1-4 — A esmola deve ser dada em secreto, diante de Deus',
-        'Mateus 6:21 — O coração acompanha aquilo que valorizamos',
-        'Mateus 6:24 — Não é possível servir a Deus e ao dinheiro',
-        'Mateus 17:24-27 — Jesus mostra responsabilidade ao pagar o imposto do templo',
-        'Mateus 22:21 — Cada um deve dar a César e a Deus o que lhes é devido',
-        'Marcos 12:41-44 — A viúva deu pouco em valor, mas muito em entrega',
-        'Mateus 5:23-24 — Antes de ofertar, é preciso buscar reconciliação',
+      "scriptures": [
+        "Mateus 6:1-4 — A esmola deve ser dada em secreto, diante de Deus",
+        "Mateus 6:21 — O coração acompanha aquilo que valorizamos",
+        "Mateus 6:24 — Não é possível servir a Deus e ao dinheiro",
+        "Mateus 17:24-27 — Jesus mostra responsabilidade ao pagar o imposto do templo",
+        "Mateus 22:21 — Cada um deve dar a César e a Deus o que lhes é devido",
+        "Marcos 12:41-44 — A viúva deu pouco em valor, mas muito em entrega",
+        "Mateus 5:23-24 — Antes de ofertar, é preciso buscar reconciliação"
       ],
-      tone: 'sun',
+      "tone": "sun"
     },
     {
-      id: 'igreja',
-      step: 5,
-      title: 'Igreja primitiva',
-      summary: 'A contribuição aparece como expressão de cuidado e generosidade.',
-      points: [
-        'Oferta proporcional',
-        'Compartilhamento e cuidado mútuo',
-        'Finalidade de suprir necessitados',
-        'Dar com alegria e voluntariamente',
+      "id": "igreja",
+      "step": 5,
+      "title": "Igreja primitiva",
+      "summary": "A contribuição aparece como expressão de cuidado e generosidade.",
+      "points": [
+        "Oferta proporcional",
+        "Compartilhamento e cuidado mútuo",
+        "Finalidade de suprir necessitados",
+        "Dar com alegria e voluntariamente"
       ],
-      scriptures: [
-        'Atos 11:29-30 — Os discípulos contribuíram conforme suas possibilidades',
-        'Atos 2:44-45 — Os irmãos repartiam bens segundo a necessidade',
-        'Atos 4:34-35 — As ofertas eram distribuídas a quem tinha necessidade',
-        'Gálatas 6:10 — Devemos fazer o bem, especialmente aos da família da fé',
-        '2 Coríntios 9:7 — Cada um deve contribuir com alegria e decisão do coração',
+      "scriptures": [
+        "Atos 11:29-30 — Os discípulos contribuíram conforme suas possibilidades",
+        "Atos 2:44-45 — Os irmãos repartiam bens segundo a necessidade",
+        "Atos 4:34-35 — As ofertas eram distribuídas a quem tinha necessidade",
+        "Gálatas 6:10 — Devemos fazer o bem, especialmente aos da família da fé",
+        "2 Coríntios 9:7 — Cada um deve contribuir com alegria e decisão do coração"
       ],
-      tone: 'mint',
+      "tone": "mint"
     },
     {
-      id: 'conclusao',
-      step: 5,
-      title: 'Conclusão central',
-      summary: 'O eixo da aula termina no senhorio de Deus sobre o coração.',
-      points: [
-        'Tudo pertence a Deus',
-        'O homem é mordomo',
-        'O dízimo na Lei tinha contexto específico',
-        'No Novo Testamento, a ênfase está em coração, generosidade, alegria, fidelidade e cuidado com o próximo',
+      "id": "conclusao",
+      "step": 5,
+      "title": "Conclusão central",
+      "summary": "O eixo da aula termina no senhorio de Deus sobre o coração.",
+      "points": [
+        "Tudo pertence a Deus",
+        "O homem é mordomo",
+        "O dízimo na Lei tinha contexto específico",
+        "No Novo Testamento, a ênfase está em coração, generosidade, alegria, fidelidade e cuidado com o próximo"
       ],
-      scriptures: [],
-      tone: 'rose',
-    },
-  ],
+      "scriptures": [],
+      "tone": "rose"
+    }
+  ]
 }
