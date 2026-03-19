@@ -97,6 +97,7 @@ export function LessonExplorer({ lesson, onBack }) {
         previewPoints: node.points?.slice(0, 3) ?? [],
         points: node.points,
         scriptures: node.scriptures,
+        imageUrl: node.imageUrl ?? '',
         tag: String(nodeIndex + 1).padStart(2, '0'),
         tone: node.tone,
         isActiveStep: node.id === currentNode.id,
@@ -296,6 +297,17 @@ export function LessonExplorer({ lesson, onBack }) {
               <p className="details-panel__summary">
                 {renderHighlightedText(selectedNode.summary)}
               </p>
+
+              {selectedNode.imageUrl ? (
+                <div className="details-panel__media">
+                  <img
+                    src={selectedNode.imageUrl}
+                    alt={selectedNode.title}
+                    loading="lazy"
+                    className="details-panel__image"
+                  />
+                </div>
+              ) : null}
 
               {selectedNode.points?.length ? (
                 <>

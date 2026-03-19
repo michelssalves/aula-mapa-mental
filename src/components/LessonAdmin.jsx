@@ -186,6 +186,16 @@ function EditIcon() {
   )
 }
 
+function ImageIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
+      <rect x="4" y="5" width="16" height="14" rx="2" />
+      <circle cx="9" cy="10" r="1.5" />
+      <path d="m20 16-4.5-4.5L8 19" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
 function ExportIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9">
@@ -865,6 +875,7 @@ export function LessonAdmin({
       summary: 'Resumo do novo card.',
       points: ['Ponto principal 1', 'Ponto principal 2'],
       scriptures: [],
+      imageUrl: '',
       tone: referenceNode?.tone ?? 'sun',
     }
 
@@ -920,6 +931,7 @@ export function LessonAdmin({
       title: `${sourceNode.title} (Copia)`,
       points: [...sourceNode.points],
       scriptures: [...sourceNode.scriptures],
+      imageUrl: sourceNode.imageUrl ?? '',
     }
 
     updateDraft((currentDraft) => {
@@ -1164,32 +1176,6 @@ export function LessonAdmin({
         <aside className="admin-sidebar">
           <div className="admin-card">
             <div className="admin-card__header">
-              <SectionTitle icon={<BookIcon />} tone="amber">Aula</SectionTitle>
-              <span>{lessonEntry.category}</span>
-            </div>
-
-            <FoldSection title="Identidade da aula">
-              <label className="admin-field">
-                <span>Titulo</span>
-                <input
-                  value={draft.content.meta.title}
-                  onChange={(event) => updateMeta('title', event.target.value)}
-                />
-              </label>
-
-              <label className="admin-field">
-                <span>Descricao</span>
-                <textarea
-                  rows={4}
-                  value={draft.content.meta.description}
-                  onChange={(event) => updateMeta('description', event.target.value)}
-                />
-              </label>
-            </FoldSection>
-          </div>
-
-          <div className="admin-card">
-            <div className="admin-card__header">
               <SectionTitle icon={<CardStackIcon />} tone="green">Cards</SectionTitle>
               <span>{draft.content.nodes.length}</span>
             </div>
@@ -1245,6 +1231,12 @@ export function LessonAdmin({
                     <div>
                       <strong>{node.title}</strong>
                       <small>{draft.content.steps[node.step]?.title}</small>
+                      {node.imageUrl ? (
+                        <span className="admin-node-item__media">
+                          <ImageIcon />
+                          Imagem
+                        </span>
+                      ) : null}
                     </div>
                   </button>
 
@@ -1269,6 +1261,32 @@ export function LessonAdmin({
                 </div>
               ))}
             </div>
+          </div>
+
+          <div className="admin-card">
+            <div className="admin-card__header">
+              <SectionTitle icon={<BookIcon />} tone="amber">Aula</SectionTitle>
+              <span>{lessonEntry.category}</span>
+            </div>
+
+            <FoldSection title="Identidade da aula">
+              <label className="admin-field">
+                <span>Titulo</span>
+                <input
+                  value={draft.content.meta.title}
+                  onChange={(event) => updateMeta('title', event.target.value)}
+                />
+              </label>
+
+              <label className="admin-field">
+                <span>Descricao</span>
+                <textarea
+                  rows={4}
+                  value={draft.content.meta.description}
+                  onChange={(event) => updateMeta('description', event.target.value)}
+                />
+              </label>
+            </FoldSection>
           </div>
 
           <div className="admin-card">
@@ -1487,29 +1505,6 @@ export function LessonAdmin({
                   </IconButton>
                 </div>
 
-                <FoldSection title="Identidade do card">
-                  <label className="admin-field">
-                    <span>Titulo</span>
-                    <input
-                      value={selectedNode.title}
-                      onChange={(event) =>
-                        updateNode(selectedNode.id, 'title', event.target.value)
-                      }
-                    />
-                  </label>
-
-                  <label className="admin-field">
-                    <span>Resumo</span>
-                    <textarea
-                      rows={4}
-                      value={selectedNode.summary}
-                      onChange={(event) =>
-                        updateNode(selectedNode.id, 'summary', event.target.value)
-                      }
-                    />
-                  </label>
-                </FoldSection>
-
                 <FoldSection title="Conteudo detalhado" defaultOpen={false}>
                   <label className="admin-field">
                     <span>Pontos principais</span>
@@ -1538,6 +1533,41 @@ export function LessonAdmin({
                           splitTextareaList(event.target.value),
                         )
                       }
+                    />
+                  </label>
+                </FoldSection>
+
+                <FoldSection title="Identidade do card">
+                  <label className="admin-field">
+                    <span>Titulo</span>
+                    <input
+                      value={selectedNode.title}
+                      onChange={(event) =>
+                        updateNode(selectedNode.id, 'title', event.target.value)
+                      }
+                    />
+                  </label>
+
+                  <label className="admin-field">
+                    <span>Resumo</span>
+                    <textarea
+                      rows={4}
+                      value={selectedNode.summary}
+                      onChange={(event) =>
+                        updateNode(selectedNode.id, 'summary', event.target.value)
+                      }
+                    />
+                  </label>
+
+                  <label className="admin-field">
+                    <span>URL da imagem</span>
+                    <input
+                      type="url"
+                      value={selectedNode.imageUrl ?? ''}
+                      onChange={(event) =>
+                        updateNode(selectedNode.id, 'imageUrl', event.target.value)
+                      }
+                      placeholder="https://..."
                     />
                   </label>
                 </FoldSection>
@@ -1611,6 +1641,18 @@ export function LessonAdmin({
                       onChange={(event) =>
                         updateStep(selectedNode.step, 'focus', event.target.value)
                       }
+                    />
+                  </label>
+
+                  <label className="admin-field">
+                    <span>URL da imagem</span>
+                    <input
+                      type="url"
+                      value={selectedNode.imageUrl ?? ''}
+                      onChange={(event) =>
+                        updateNode(selectedNode.id, 'imageUrl', event.target.value)
+                      }
+                      placeholder="https://..."
                     />
                   </label>
                 </FoldSection>
