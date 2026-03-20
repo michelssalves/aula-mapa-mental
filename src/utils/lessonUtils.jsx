@@ -56,7 +56,8 @@ function buildHighlightPattern(highlightTerms) {
 }
 
 export function renderHighlightedText(text, customTerms = []) {
-  const scriptureMatch = text.match(/^(.+?\d+:\d+(?:-\d+)?)\s+[\u2014-]\s+(.+)$/)
+  const sourceText = String(text ?? '')
+  const scriptureMatch = sourceText.match(/^(.+?\d+:\d+(?:-\d+)?)\s+[\u2014-]\s+(.+)$/)
   const highlightTerms = buildHighlightTerms(customTerms)
   const highlightPattern = buildHighlightPattern(highlightTerms)
 
@@ -71,10 +72,10 @@ export function renderHighlightedText(text, customTerms = []) {
   }
 
   if (!highlightPattern) {
-    return text
+    return renderManualBold(sourceText)
   }
 
-  const parts = text.split(highlightPattern)
+  const parts = sourceText.split(highlightPattern)
 
   return parts.map((part, index) => {
     if (!part) {
@@ -85,6 +86,28 @@ export function renderHighlightedText(text, customTerms = []) {
       (term) => term.toLowerCase() === part.toLowerCase(),
     )
 
-    return isHighlight ? <strong key={`${part}-${index}`}>{part}</strong> : part
+    if (isHighlight) {
+      return <strong key={`${part}-${index}`}>{part}</strong>
+    }
+
+    return <span key={`${part}-${index}`}>{renderManualBold(part)}</span>
+  })
+}
+
+function renderManualBold(text) {
+  const parts = String(text ?? '').split(/(\*\*.*?\*\*)/g)
+
+  return parts.map((part, index) => {
+    if (!part) {
+      return null
+    }
+
+    const match = part.match(/^\*\*(.*?)\*\*$/)
+
+    if (match) {
+      return <strong key={`manual-${index}`}>{match[1]}</strong>
+    }
+
+    return part
   })
 }
