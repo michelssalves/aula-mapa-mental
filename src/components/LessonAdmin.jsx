@@ -1286,6 +1286,18 @@ export function LessonAdmin({
                   onChange={(event) => updateMeta('description', event.target.value)}
                 />
               </label>
+
+              <label className="admin-field">
+                <span>Palavras-chave em destaque</span>
+                <textarea
+                  rows={6}
+                  value={(draft.content.meta.highlightKeywords ?? []).join('\n')}
+                  onChange={(event) =>
+                    updateMeta('highlightKeywords', splitTextareaList(event.target.value))
+                  }
+                  placeholder={'Deus\nSenhor\nmordomia'}
+                />
+              </label>
             </FoldSection>
           </div>
 

@@ -1,4 +1,4 @@
-export const highlightTerms = [
+export const defaultHighlightTerms = [
   'Deus',
   'Senhor',
   'Cristo',
@@ -26,14 +26,6 @@ export const highlightTerms = [
   'resumo',
 ]
 
-const highlightPattern = new RegExp(
-  `(${highlightTerms
-    .sort((a, b) => b.length - a.length)
-    .map((term) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
-    .join('|')})`,
-  'gi',
-)
-
 export const toneEdgeColors = {
   sun: '#d18817',
   sky: '#3a7bd5',
@@ -41,17 +33,45 @@ export const toneEdgeColors = {
   rose: '#c45c47',
 }
 
-export function renderHighlightedText(text) {
+export function buildHighlightTerms(customTerms = []) {
+  const normalizedTerms = [...defaultHighlightTerms, ...customTerms]
+    .map((term) => String(term ?? '').trim())
+    .filter(Boolean)
+
+  return [...new Set(normalizedTerms)]
+}
+
+function buildHighlightPattern(highlightTerms) {
+  if (!highlightTerms.length) {
+    return null
+  }
+
+  return new RegExp(
+    `(${highlightTerms
+      .sort((a, b) => b.length - a.length)
+      .map((term) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+      .join('|')})`,
+    'gi',
+  )
+}
+
+export function renderHighlightedText(text, customTerms = []) {
   const scriptureMatch = text.match(/^(.+?\d+:\d+(?:-\d+)?)\s+[\u2014-]\s+(.+)$/)
+  const highlightTerms = buildHighlightTerms(customTerms)
+  const highlightPattern = buildHighlightPattern(highlightTerms)
 
   if (scriptureMatch) {
     return (
       <>
         <strong>{scriptureMatch[1]}</strong>
         {' \u2014 '}
-        {renderHighlightedText(scriptureMatch[2])}
+        {renderHighlightedText(scriptureMatch[2], customTerms)}
       </>
     )
+  }
+
+  if (!highlightPattern) {
+    return text
   }
 
   const parts = text.split(highlightPattern)

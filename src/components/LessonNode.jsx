@@ -15,15 +15,9 @@ export function LessonNode({ data }) {
       </div>
       <h3>{data.title}</h3>
       {data.summary ? (
-        <p className="lesson-node__summary">{renderHighlightedText(data.summary)}</p>
-      ) : null}
-
-      {data.previewPoints?.length ? (
-        <ul className="lesson-node__list">
-          {data.previewPoints.map((point) => (
-            <li key={point}>{renderHighlightedText(point)}</li>
-          ))}
-        </ul>
+        <p className="lesson-node__summary">
+          {renderHighlightedText(data.summary, data.highlightTerms)}
+        </p>
       ) : null}
       <Handle type="source" position={Position.Right} className="lesson-node__handle" />
     </article>

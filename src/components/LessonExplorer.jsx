@@ -68,6 +68,7 @@ export function LessonExplorer({ lesson, onBack }) {
   )
   const [leftPanel, setLeftPanel] = useState(null)
   const [detailsOpen, setDetailsOpen] = useState(false)
+  const highlightTerms = lesson.meta.highlightKeywords ?? []
 
   const totalNodes = lesson.nodes.length
   const currentNode = lesson.nodes[activeNodeIndex] ?? lesson.nodes[0]
@@ -98,6 +99,7 @@ export function LessonExplorer({ lesson, onBack }) {
         points: node.points,
         scriptures: node.scriptures,
         imageUrl: node.imageUrl ?? '',
+        highlightTerms,
         tag: String(nodeIndex + 1).padStart(2, '0'),
         tone: node.tone,
         isActiveStep: node.id === currentNode.id,
@@ -207,7 +209,7 @@ export function LessonExplorer({ lesson, onBack }) {
               <span className="side-panel__eyebrow">Visão geral da aula</span>
               <h3 className="side-panel__title">{lesson.meta.title}</h3>
               <p className="details-panel__summary">
-                {renderHighlightedText(lesson.meta.description)}
+                {renderHighlightedText(lesson.meta.description, highlightTerms)}
               </p>
               <div className="side-panel__stats">
                 <div>
@@ -301,7 +303,7 @@ export function LessonExplorer({ lesson, onBack }) {
               </div>
               <h3>{selectedNode.title}</h3>
               <p className="details-panel__summary">
-                {renderHighlightedText(selectedNode.summary)}
+                {renderHighlightedText(selectedNode.summary, highlightTerms)}
               </p>
 
               {selectedNode.imageUrl ? (
@@ -320,7 +322,7 @@ export function LessonExplorer({ lesson, onBack }) {
                   <h4>Pontos principais</h4>
                   <ul className="details-panel__list">
                     {selectedNode.points.map((point) => (
-                      <li key={point}>{renderHighlightedText(point)}</li>
+                      <li key={point}>{renderHighlightedText(point, highlightTerms)}</li>
                     ))}
                   </ul>
                 </>
@@ -331,7 +333,7 @@ export function LessonExplorer({ lesson, onBack }) {
                   <h4>Versículos</h4>
                   <ul className="details-panel__list details-panel__list--scriptures">
                     {selectedNode.scriptures.map((scripture) => (
-                      <li key={scripture}>{renderHighlightedText(scripture)}</li>
+                      <li key={scripture}>{renderHighlightedText(scripture, highlightTerms)}</li>
                     ))}
                   </ul>
                 </>
